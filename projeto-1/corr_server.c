@@ -10,7 +10,7 @@
 #include <arpa/inet.h>
 #include <pthread.h>
 
-#define PORT 3490
+#define PORT 8080
 #define BACKLOG 10
 
 int main() {
