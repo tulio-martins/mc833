@@ -70,8 +70,7 @@ int main() {
             if ((pid = fork()) == 0){
                 close(socket_fd);
                 while(1) {
-
-                    /*recebe a mensagem do cliente*/
+                  
                     if ((num = recv(new_fd, buffer, 1024,0))== -1) {
                             perror("recv");
                             exit(1);
