@@ -20,7 +20,7 @@
 #define CONNECTION_CLOSED '8'
 
 #define GREETING_MESSAGE " \n\nConectado ao sistema de disciplinas\n\
-As disciplinas disponiveis sao: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346;\n\
+As disciplinas disponiveis sao: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886\n\
 As opcoes disponiveis sao:\n\
   1 - lista todos os codigos de disciplinas com seus respectivos titulos\n\
   2 - dado o coidog de uma disciplina retorna a ementa\n\

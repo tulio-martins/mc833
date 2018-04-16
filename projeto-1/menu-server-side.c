@@ -26,13 +26,13 @@
 #define LINESIZE 1024
 
 typedef struct {
-  char id[6];              /*Formato : MCXXX\0 (?) (pode ser int XXX ja que todas
+  char id[6];             /*Formato : MCXXX\0 (?) (pode ser int XXX ja que todas
                            * sao MC (?))*/
 
   char titulo[LINESIZE];  /*Formato : linha de texto*/
   char ementa[TEXTSIZE];  /*Formato : texto*/
   char sala_de_aula[5];   /*Formato : CC02\0 (?)*/
-  char horario[LINESIZE]; /*Formato : DIA_DA_SEMANA HH:mm; DIA_DA_SEMANA HH:mm\0 (?)*/
+  char horario[LINESIZE]; /*Formato : DIA_DA_SEMANA HH:mm a HH:mm;DIA_DA_SEMANA...\0 (?)*/
 
   char comentario_ultima_aula[TEXTSIZE]; /*Formato : texto*/
 
@@ -50,8 +50,13 @@ int main() {
 
     char buffer[LINESIZE];
     char text[TEXTSIZE];
+    char client_disc_id[6];
     int yes =1;
 
+
+    Disciplina disc[10];
+
+    inicializandoDisciplinas(disc);
 
     /*Cria socket*/
     if ((socket_fd = socket(AF_INET, SOCK_STREAM, 0))== -1) {
@@ -106,7 +111,7 @@ int main() {
                    switch (option) {
                        case LIST_DISCIPLINES:
 
-                          listDiscplines();
+                          listDiscplines(new_fd, disc);
                           break;
 
                        case DISCIPLINE_MENU:
@@ -115,13 +120,14 @@ int main() {
                           send(new_fd,buffer, strlen(buffer),0);
 
                           /*recebe a mensagem do cliente*/
-                          if ((num = recv(new_fd, buffer, LINESIZE, 0))== -1 || num == 0) {
+                          if ((num = recv(new_fd, client_disc_id, 6, 0))== -1 || num == 0) {
                              /*Caso de erro, pode houver perda de conexao com o
                               * cliente, portanto conexao deve ser terminada*/
                              printf("Erro na recepcao de mensagem  terminando conexao\n");
                              option = CONNECTION_CLOSED;
                           } else {
-                            showDisciplineMenu();
+                            client_disc_id[6] = '\0';
+                            showDisciplineMenu(client_disc_id, new_fd, disc);
                           }
 
                           break;
@@ -131,20 +137,23 @@ int main() {
                           buffer = "Escolha a discplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886\0";
                           send(new_fd,buffer, strlen(buffer),0);
 
-                          if ((num = recv(new_fd, buffer, LINESIZE, 0))== -1 || num == 0) {
+                          if ((num = recv(new_fd, client_disc_id, 6, 0))== -1 || num == 0) {
                              /*Caso de erro, pode houver perda de conexao com o
                               * cliente, portanto conexao deve ser terminada*/
                              printf("Erro na recepcao de mensagem  terminando conexao\n");
                              option = CONNECTION_CLOSED;
                           } else {
-                            showDisciplineInfo();
+                            showDisciplineInfo(client_disc_id, new_fd, disc);
                           }
 
                           break;
 
                        case ALL_DISCIPL_INFO:
 
-                          showAllDiscplinesInfo();
+                          for(int i = 0; i < 10; i++) {
+                              showDisciplineInfo(disc[i].id, new_fd, disc);
+                          }
+
                           break;
 
                        case WRITE_COMMENT:
@@ -213,28 +222,149 @@ int main() {
 
 }
 
+/*Inicializa informacoes das disciplinas*/
+/*BEM INCOMPLETO AINDA :/ */
+void inicializandoDisciplinas(disc) {
+    disc[0].id = "MC833\0";
+    disc[0].titulo = "Programacao de Redes de Computadores\0";
+    disc[0].ementa = "Programacao utilizando diferentes tecnologias de comunicacao:\
+                      sockets, TCP e UDP, e chamada de metodo remoto.\0";
+    disc[0].sala_de_aula = "CC03\0";
+    disc[0].horario = "Quinta 10:00 a 12:00\0";
 
-/*Listar codigos das disciplinas com respectivos titulos*/
-void listDiscplines() {
+
+    disc[1].id = "MC102\0";
+    disc[1].titulo = "Algoritmos e Programacao de Computadores\0";
+    disc[1].ementa = "Conceitos básicos de organização de computadores.\
+                      Construcao de algoritmos e sua representação em pseudocodigo\
+                      e linguagens de alto nivel. Desenvolvimento sistematico e \
+                      implementacao de programas. Estruturacao, depuracao, testes\
+                       e documentacao de programas. Resolucao de problemas.\0";
+    disc[1].sala_de_aula = "CC02";
+    disc[1].horario = "Sexta 14:00 a 16:00\0";
+
+    disc[2].id = "MC536\0";
+    disc[2].titulo = "Bancos de Dados: Teoria e Pratica\0";
+    disc[2].ementa = "Arquiteturas de sistemas de gerenciamento de bancos de dados.\
+                      Modelagem de dados: modelos conceituais e lógicos, incluindo o modelo relacional\
+                      e normalização. Álgebra relacional. Linguagens de definição e de manipulação de dados.\
+                      Otimização de consultas. Mecanismos de proteção, recuperação e segurança.\
+                      Controle de concorrência. Bancos de dados não relacionais.\
+                      Projeto e desenvolvimento de ferramentas e técnicas utilizadas na\
+                      solução de problemas de sistemas de informação, utilizando bancos de dados.\
+                      Modelagem, especificação, projeto e implementação de aplicações em sistemas de informação.\0";
+    disc[2].sala_de_aula = "CB02";
+    disc[2].horario = "Segunda 10:00 a 12:00; Quarta 10:00 a 12:00";
+
+    disc[0].id = "MC358\0";
+    disc[0].titulo = " 	Fundamentos Matemáticos da Computação\0";
+    disc[0].ementa = ;
+    disc[0].sala_de_aula = ;
+    disc[0].horario = ;
+
+    disc[0].id = "MC833\0";
+    disc[0].titulo = ;
+    disc[0].ementa = ;
+    disc[0].sala_de_aula = ;
+    disc[0].horario = ;
+
+    disc[0].id = "MC833\0";
+    disc[0].titulo = ;
+    disc[0].ementa = ;
+    disc[0].sala_de_aula = ;
+    disc[0].horario = ;
+
+    disc[0].id = "MC833\0";
+    disc[0].titulo = ;
+    disc[0].ementa = ;
+    disc[0].sala_de_aula = ;
+    disc[0].horario = ;
+
+    disc[0].id = "MC833\0";
+    disc[0].titulo = ;
+    disc[0].ementa = ;
+    disc[0].sala_de_aula = ;
+    disc[0].horario = ;
+
+    disc[0].id = "MC833\0";
+    disc[0].titulo = ;
+    disc[0].ementa = ;
+    disc[0].sala_de_aula = ;
+    disc[0].horario = ;
+
+    disc[0].id = "MC833\0";
+    disc[0].titulo = ;
+    disc[0].ementa = ;
+    disc[0].sala_de_aula = ;
+    disc[0].horario = ;
+
 
 }
 
+
+/*Listar codigos das disciplinas com respectivos titulos*/
+void listDiscplines(int new_fd) {
+
+    printf("Enviando lista de disciplinas\n");
+    for(int i = 0; i < 10; i++) {
+
+      send(new_fd, disc[i].id, sizeof(disc.id), 0);
+      send(new_fd, disc[i].titulo, sizeof(disc.titulo), 0);
+
+    }
+    printf("Enviadas todas as disciplinas\n");
+}
+
 /*Dado o codigo de uma disciplina, retornar a ementa*/
-void showDisciplineMenu() {
+void showDisciplineMenu(char id[], int new_fd, Disciplina disc[]) {
+  int i = findDiscpline(id, disc);
+
+  if (i < 0) {
+    printf("Erro, disciplina nao encontrada\n");
+    send(new_fd, ERROR_MESSAGE, TEXTSIZE, 0);
+  } else {
+    send(new_fd, disc[i].ementa, TEXTSIZE, 0);
+  }
 
 }
 
 /*Dado o codigo de uma disciplina, retornar todas as informacoes da mesma*/
-void showDisciplineInfo() {
+void showDisciplineInfo (int new_fd) {
+  int i = findDiscpline(id, disc);
 
-}
-
-/*Escrever um comentario para proxima aula da disciplina*/
-void writeComment(char text[TEXTSIZE]) {
-
+  if (result < 0) {
+    printf("Erro, disciplina nao encontrada\n");
+    send(new_fd, ERROR_MESSAGE, TEXTSIZE, 0);
+  } else {
+    send(new_fd, disc[i].id, 6, 0);
+    send(new_fd, disc[i].titulo, LINESIZE, 0);
+    send(new_fd, disc[i].ementa, TEXTSIZE, 0);
+    send(new_fd, disc[i].sala_de_aula, 5, 0);
+    send(new_fd, disc[i].horario, LINESIZE, 0);
+    send(new_fd, disc[i].comentario_ultima_aula, TEXTSIZE, 0);
+  }
 }
 
 /*Retornar comentario da ultima aula da mesma disciplina*/
-void getComment() {
+void getComment(int new_fd, char id, Disciplina disc) {
+  int i = findDiscpline(id, disc);
 
+  if (i < 0) {
+    printf("Erro, disciplina nao encontrada\n");
+    send(new_fd, ERROR_MESSAGE, TEXTSIZE, 0);
+  } else {
+    send(new_fd, disc[i].comentario_ultima_aula, TEXTSIZE, 0);
+  }
+}
+
+/*Retorna o indice da disciplina com o id 'id' - retorna '-1' se nao encontrar*/
+int findDiscpline(char id, Disciplina disc[]) {
+  int not_found = 1;
+
+  for(int i = 0; i < 10 && not_found; i++) {
+    if(strcmp(id, disc[i].id) == 0) {
+      return i;
+    }
+  }
+  return -1;
 }
