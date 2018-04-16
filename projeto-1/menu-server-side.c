@@ -22,6 +22,22 @@
 #define PORT 8080
 #define BACKLOG 10
 
+#define TEXTSIZE 32768
+#define LINESIZE 1024
+
+typedef struct {
+  char id[6];              /*Formato : MCXXX\0 (?) (pode ser int XXX ja que todas
+                           * sao MC (?))*/
+
+  char titulo[LINESIZE];  /*Formato : linha de texto*/
+  char ementa[TEXTSIZE];  /*Formato : texto*/
+  char sala_de_aula[5];   /*Formato : CC02\0 (?)*/
+  char horario[LINESIZE]; /*Formato : DIA_DA_SEMANA HH:mm; DIA_DA_SEMANA HH:mm\0 (?)*/
+
+  char comentario_ultima_aula[TEXTSIZE]; /*Formato : texto*/
+
+} Disciplina;
+
 int main() {
 
     char option;
@@ -32,8 +48,8 @@ int main() {
     socklen_t size;
     pid_t pid;
 
-    char buffer[1024];
-    char text[32768];
+    char buffer[LINESIZE];
+    char text[TEXTSIZE];
     int yes =1;
 
 
@@ -99,7 +115,7 @@ int main() {
                           send(new_fd,buffer, strlen(buffer),0);
 
                           /*recebe a mensagem do cliente*/
-                          if ((num = recv(new_fd, buffer, 1024, 0))== -1 || num == 0) {
+                          if ((num = recv(new_fd, buffer, LINESIZE, 0))== -1 || num == 0) {
                              /*Caso de erro, pode houver perda de conexao com o
                               * cliente, portanto conexao deve ser terminada*/
                              printf("Erro na recepcao de mensagem  terminando conexao\n");
@@ -115,7 +131,7 @@ int main() {
                           buffer = "Escolha a discplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886\0";
                           send(new_fd,buffer, strlen(buffer),0);
 
-                          if ((num = recv(new_fd, buffer, 1024, 0))== -1 || num == 0) {
+                          if ((num = recv(new_fd, buffer, LINESIZE, 0))== -1 || num == 0) {
                              /*Caso de erro, pode houver perda de conexao com o
                               * cliente, portanto conexao deve ser terminada*/
                              printf("Erro na recepcao de mensagem  terminando conexao\n");
@@ -136,7 +152,7 @@ int main() {
                           buffer = "Escolha a discplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886\0";
                           send(new_fd,buffer, strlen(buffer),0);
 
-                          if ((num = recv(new_fd, buffer, 1024, 0))== -1 || num == 0) {
+                          if ((num = recv(new_fd, buffer, LINESIZE, 0))== -1 || num == 0) {
                              /*Caso de erro, pode houver perda de conexao com o
                               * cliente, portanto conexao deve ser terminada*/
                              printf("Erro na recepcao de mensagem  terminando conexao\n");
@@ -147,12 +163,12 @@ int main() {
                             buffer = "Escreva o texto\0";
                             send(new_fd,buffer, strlen(buffer),0);
 
-                            if ((num = recv(new_fd, text, 32768, 0))== -1 || num == 0) {
+                            if ((num = recv(new_fd, text, TEXTSIZE, 0))== -1 || num == 0) {
                                /*Caso de erro, pode houver perda de conexao com o
                                 * cliente, portanto conexao deve ser terminada*/
                                printf("Erro na recepcao de mensagem  terminando conexao\n");
                                option = CONNECTION_CLOSED;
-                            } else {}
+                            } else {
                               writeComment(text);
                             }
                           }
@@ -164,7 +180,7 @@ int main() {
                           buffer = "Escolha a discplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886\0";
                           send(new_fd,buffer, strlen(buffer),0);
 
-                          if ((num = recv(new_fd, buffer, 1024, 0))== -1 || num == 0) {
+                          if ((num = recv(new_fd, buffer, LINESIZE, 0))== -1 || num == 0) {
                              /*Caso de erro, pode houver perda de conexao com o
                               * cliente, portanto conexao deve ser terminada*/
                              printf("Erro na recepcao de mensagem  terminando conexao\n");
@@ -214,7 +230,7 @@ void showDisciplineInfo() {
 }
 
 /*Escrever um comentario para proxima aula da disciplina*/
-void writeComment(char text[32768]) {
+void writeComment(char text[TEXTSIZE]) {
 
 }
 
