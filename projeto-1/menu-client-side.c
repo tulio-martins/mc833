@@ -11,7 +11,7 @@
 #include <pthread.h>
 
 #define LIST_DISCIPLINES  '1'
-#define DISCIPLINE_TABLE  '2'
+#define DISCIPLINE_MENU   '2' /*ementa da disciplina*/
 #define DISCIPLINE_INFO   '3'
 #define ALL_DISCIPL_INFO  '4'
 #define WRITE_COMMENT     '5'
@@ -19,18 +19,16 @@
 #define EXIT              '7'
 #define CONNECTION_CLOSED '8'
 
-#define GREETING_MESSAGE
-" Conectado ao sistema de disciplinas
-  As disciplinas disponiveis sao: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346;
-  As opcoes disponiveis sao:
-  1 - lista todos os codigos de disciplinas com seus respectivos titulos
-  2 - dado o coidog de uma disciplina retorna a ementa
-  3 - dado o codigo de uma disciplina, retorna todas as informacoes desta disciplina
-  4 - lista todas as informacoes de todas as disciplinas
-  5 - escreve um comentario sobre a proxima aula de uma disciplina
-  6 - dado o codigo de uma disciplina retorna o comentario sobre a ultima aula da disciplina
-  7 - sair do sistema\n
-"
+#define GREETING_MESSAGE " \n\nConectado ao sistema de disciplinas\n\
+As disciplinas disponiveis sao: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346;\n\
+As opcoes disponiveis sao:\n\
+  1 - lista todos os codigos de disciplinas com seus respectivos titulos\n\
+  2 - dado o coidog de uma disciplina retorna a ementa\n\
+  3 - dado o codigo de uma disciplina, retorna todas as informacoes desta disciplina\n\
+  4 - lista todas as informacoes de todas as disciplinas\n\
+  5 - escreve um comentario sobre a proxima aula de uma disciplina\n\
+  6 - dado o codigo de uma disciplina retorna o comentario sobre a ultima aula da disciplina\n\
+  7 - sair do sistema\n"
 
 #define PORT 8080
 #define BACKLOG 10
@@ -82,6 +80,12 @@ int main() {
           printf(GREETING_MESSAGE);
 
           scanf("%c", &option);
+
+          if ((send(socket_fd, &option, 1,0))== -1) {
+                  printf("Failure Sending Message\n");
+                  close(socket_fd);
+                  exit(1);
+          }
 
           switch (option) {
               case LIST_DISCIPLINES:
