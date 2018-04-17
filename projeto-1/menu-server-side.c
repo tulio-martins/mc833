@@ -19,6 +19,8 @@
 #define EXIT              '7'
 #define CONNECTION_CLOSED '8'
 
+#define ERROR_MESSAGE "Erro, disciplina nao encontrada\0"
+
 #define PORT 8080
 #define BACKLOG 10
 
@@ -354,7 +356,7 @@ void getComment(int new_fd, char id, Disciplina disc) {
     send(new_fd, ERROR_MESSAGE, TEXTSIZE, 0);
   } else {
     send(new_fd, disc[i].comentario_ultima_aula, TEXTSIZE, 0);
-  }
+  }/
 }
 
 /*Retorna o indice da disciplina com o id 'id' - retorna '-1' se nao encontrar*/

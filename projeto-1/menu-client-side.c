@@ -43,6 +43,7 @@ int main() {
     char buffer[1024];
 
     char buff[1024];
+    char disc_id[6];
 
     /*Caso nao exista um IP para o qual conectar com o host*/
     if (argc != 2) {
@@ -82,19 +83,57 @@ int main() {
           scanf("%c", &option);
 
           if ((send(socket_fd, &option, 1,0))== -1) {
-                  printf("Failure Sending Message\n");
+                  printf("Erro ao mandar mensagem - terminando conexao\n");
                   close(socket_fd);
                   exit(1);
           }
 
           switch (option) {
               case LIST_DISCIPLINES:
-
+                  if (recvListDisciplines(socket_fd)) {
+                    option = CONNECTION_CLOSED;
+                    printf("Devido a erro na recepcao de mensagens, conexao terminada\n");
+                  }
                   break;
               case DISCIPLINE_TABLE:
 
+                  if ((num = recv(socket_fd, buffer, strlen(buffer), 0))== -1 || num == 0) {
+                    /*Caso de erro, pode houver perda de conexao com o
+                    * cliente, portanto conexao deve ser terminada*/
+                    printf("Erro na recepcao de mensagem  terminando conexao\n");
+                    option = CONNECTION_CLOSED;
+                  } else {
+
+                    printf("Escolha a disciplina da qual deseja descobrir a ementa:\n");
+                    scanf("%s", disc_id);
+
+                    send(socket_fd, disc_id, 6, 0);
+
+                    if (recvDisciplineTable(socket_fd, disc_id)) {
+                      option = CONNECTION_CLOSED;
+                      printf("Devido a erro na recepcao de mensagens, conexao terminada\n");
+                    }
+                  }
                   break;
               case DISCIPLINE_INFO:
+
+                  if ((num = recv(socket_fd, buffer, strlen(buffer), 0))== -1 || num == 0) {
+                    /*Caso de erro, pode houver perda de conexao com o
+                    * cliente, portanto conexao deve ser terminada*/
+                    printf("Erro na recepcao de mensagem  terminando conexao\n");
+                    option = CONNECTION_CLOSED;
+                  } else {
+
+                    printf("Escolha a disciplina da qual deseja descobrir todas as informacoes:\n");
+                    scanf("%s", disc_id);
+
+                    send(socket_fd, disc_id, 6, 0);
+
+                    if (recvDisciplineTable(socket_fd, disc_id)) {
+                      option = CONNECTION_CLOSED;
+                      printf("Devido a erro na recepcao de mensagens, conexao terminada\n");
+                    }
+                  }
 
                   break;
               case ALL_DISCIPL_INFO:
@@ -105,7 +144,7 @@ int main() {
                   break;
               case NEXT_CLASS_COMM:
 
-                  break;
+                 break;
               case CONNECTION_CLOSED:
                  printf("Erro na conexão - Servidor perdido\n");
                  break;
@@ -120,4 +159,77 @@ int main() {
     close(socket_fd);
     return 0;
 
+}
+
+/*Trata mensagens de todas as disciplinas*/
+int recvListDisciplines(int socket_fd) {
+
+  int num;
+  char id[6];
+  char titulo[LINESIZE];
+
+
+  printf("Recebendo lista de disciplinas\n");
+  for(int i = 0; i < 10; i++) {
+
+    /*Recebe id de uma disciplina*/
+    num = recv(socket_fd, id, sizeof(id),0);
+    if (num <= 0 ){
+      printf("Ou conexao fechada ou erro\n");
+      return -1;
+    }
+
+    /*Recebe titulo de uma disciplina*/
+    num = recv(socket_fd, titulo, LINESIZE,0);
+    if (num <= 0 ){
+      printf("Either Connection Closed or Error\n");
+      return -1;
+    }
+
+    /*Imprime saida pra o cliente*/
+    printf("Disciplina %s : %s\n", id, titulo);
+  }
+  printf("Foram listadas todas as disciplinas\n");
+
+  return 0;
+}
+
+/*Trata mensagem da ementa da disciplina*/
+int recvDisciplineTable(int socket_fd, char disc_id[6]) {
+  int num;
+  char ementa[TEXTSIZE];
+
+
+  printf("Recebendo ementa da disciplina\n");
+
+  /*Recebe id de uma disciplina*/
+  num = recv(socket_fd, ementa, TEXTSIZE,0);
+  if (num <= 0 ){
+    printf("Ou conexao fechada ou erro\n");
+    return -1;
+  }
+
+  printf("Disciplina %s.\n Ementa: %s\n", disc_id, ementa);
+
+  return 0;
+}
+
+int recvDisciplineInfo(int socket_fd, char disc_id) {
+  int num;
+  char ementa[TEXTSIZE];
+  char
+
+
+  printf("Recebendo ementa da disciplina\n");
+
+  /*Recebe id de uma disciplina*/
+  num = recv(socket_fd, ementa, TEXTSIZE,0);
+  if (num <= 0 ){
+    printf("Ou conexao fechada ou erro\n");
+    return -1;
+  }
+
+  printf("Disciplina %s.\n Ementa: %s\n", disc_id, ementa);
+
+  return 0;
 }
