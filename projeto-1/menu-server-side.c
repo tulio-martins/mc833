@@ -42,17 +42,17 @@ typedef struct {
 
 /*funcoes*/
 
-void inicializandoDisciplinas(Disciplina** disc);
+void inicializandoDisciplinas(Disciplina* disc[10]);
 /*Listar codigos das disciplinas com respectivos titulos*/
-void listDiscplines(int new_fd);
+void listDiscplines(int new_fd, Disciplina disc[]);
 /*Dado o codigo de uma disciplina, retornar a ementa*/
 void showDisciplineMenu(char id[], int new_fd, Disciplina disc[]);
 /*Dado o codigo de uma disciplina, retornar todas as informacoes da mesma*/
-void showDisciplineInfo (int new_fd);
+void showDisciplineInfo (char id[], int new_fd, Disciplina disc[]);
 /*Retornar comentario da ultima aula da mesma disciplina*/
-void getComment(int new_fd, char id, Disciplina disc);
+void getComment(int new_fd, char id[], Disciplina disc[]);
 /*Retorna o indice da disciplina com o id 'id' - retorna '-1' se nao encontrar*/
-int findDiscpline(char id, Disciplina disc[]);
+int findDiscipline(char id[], Disciplina disc[]);
 
 
 
@@ -179,7 +179,7 @@ int main() {
                           strcpy(buffer, "Escolha a discplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886\0");
                           send(new_fd,buffer, strlen(buffer),0);
 
-                          if ((num = recv(new_fd, buffer, LINESIZE, 0))== -1 || num == 0) {
+                          if ((num = recv(new_fd, client_disc_id, 6, 0))== -1 || num == 0) {
                              /*Caso de erro, pode houver perda de conexao com o
                               * cliente, portanto conexao deve ser terminada*/
                              printf("Erro na recepcao de mensagem  terminando conexao\n");
@@ -195,8 +195,13 @@ int main() {
                                 * cliente, portanto conexao deve ser terminada*/
                                printf("Erro na recepcao de mensagem. Terminando conexao\n");
                                option = CONNECTION_CLOSED;
-                            } else {
-                              writeComment(text);
+                             } else {
+                               int i = findDiscipline(client_disc_id, disc);
+
+                               if (i < 0 ) {
+                                 printf("Erro na busca de dsiciplinas\n");
+                               } else
+                                 strcpy(disc[i].comentario_ultima_aula, text);
                             }
                           }
 
@@ -207,13 +212,13 @@ int main() {
                           strcpy(buffer, "Escolha a discplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886\0");
                           send(new_fd,buffer, strlen(buffer),0);
 
-                          if ((num = recv(new_fd, buffer, LINESIZE, 0))== -1 || num == 0) {
+                          if ((num = recv(new_fd, client_disc_id, 6, 0))== -1 || num == 0) {
                              /*Caso de erro, pode houver perda de conexao com o
                               * cliente, portanto conexao deve ser terminada*/
                              printf("Erro na recepcao de mensagem  terminando conexao\n");
                              option = CONNECTION_CLOSED;
                           } else {
-                            getComment();
+                            getComment(new_fd, client_disc_id, disc);
                           }
 
                           break;
@@ -242,7 +247,7 @@ int main() {
 
 /*Inicializa informacoes das disciplinas*/
 /*BEM INCOMPLETO AINDA :/ */
-void inicializandoDisciplinas(Disciplina** disc) {
+void inicializandoDisciplinas(Disciplina* disc[10]) {
     strcpy(disc[0]->id, "MC833\0");
     strcpy(disc[0]->titulo, "Programacao de Redes de Computadores\0");
     strcpy(disc[0]->ementa, "Programacao utilizando diferentes tecnologias de comunicacao:\
@@ -321,13 +326,13 @@ void inicializandoDisciplinas(Disciplina** disc) {
 
 
 /*Listar codigos das disciplinas com respectivos titulos*/
-void listDiscplines(int new_fd) {
+void listDiscplines(int new_fd, Disciplina disc[]) {
 
     printf("Enviando lista de disciplinas\n");
     for(int i = 0; i < 10; i++) {
 
-      send(new_fd, disc[i].id, sizeof(disc.id), 0);
-      send(new_fd, disc[i].titulo, sizeof(disc.titulo), 0);
+      send(new_fd, disc[i].id, 6, 0);
+      send(new_fd, disc[i].titulo, LINESIZE, 0);
 
     }
     printf("Enviadas todas as disciplinas\n");
@@ -335,7 +340,7 @@ void listDiscplines(int new_fd) {
 
 /*Dado o codigo de uma disciplina, retornar a ementa*/
 void showDisciplineMenu(char id[], int new_fd, Disciplina disc[]) {
-  int i = findDiscpline(id, disc);
+  int i = findDiscipline(id, disc);
 
   if (i < 0) {
     printf("Erro, disciplina nao encontrada\n");
@@ -347,10 +352,10 @@ void showDisciplineMenu(char id[], int new_fd, Disciplina disc[]) {
 }
 
 /*Dado o codigo de uma disciplina, retornar todas as informacoes da mesma*/
-void showDisciplineInfo (int new_fd) {
-  int i = findDiscpline(id, disc);
+void showDisciplineInfo (char id[], int new_fd, Disciplina disc[]) {
+  int i = findDiscipline(id, disc);
 
-  if (result < 0) {
+  if (i < 0) {
     printf("Erro, disciplina nao encontrada\n");
     send(new_fd, ERROR_MESSAGE, TEXTSIZE, 0);
   } else {
@@ -364,8 +369,8 @@ void showDisciplineInfo (int new_fd) {
 }
 
 /*Retornar comentario da ultima aula da mesma disciplina*/
-void getComment(int new_fd, char id, Disciplina disc) {
-  int i = findDiscpline(id, disc);
+void getComment(int new_fd, char id[], Disciplina disc[]) {
+  int i = findDiscipline(id, disc);
 
   if (i < 0) {
     printf("Erro, disciplina nao encontrada\n");
@@ -376,11 +381,11 @@ void getComment(int new_fd, char id, Disciplina disc) {
 }
 
 /*Retorna o indice da disciplina com o id 'id' - retorna '-1' se nao encontrar*/
-int findDiscpline(char id, Disciplina disc[]) {
+int findDiscipline(char id[], Disciplina disc[]) {
   int not_found = 1;
 
   for(int i = 0; i < 10 && not_found; i++) {
-    if(id == atoi(disc[i].id)) {
+    if(strcmp(id, disc[i].id) == 0) {
       return i;
     }
   }
