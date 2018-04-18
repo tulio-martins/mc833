@@ -42,6 +42,7 @@ typedef struct {
 
 /*funcoes*/
 
+/*Inicializa a matriz 'disc' de disciplinas*/
 void inicializandoDisciplinas(Disciplina* disc[10]);
 /*Listar codigos das disciplinas com respectivos titulos*/
 void listDiscplines(int new_fd, Disciplina disc[]);
@@ -135,7 +136,7 @@ int main() {
                        case DISCIPLINE_MENU:
 
                           strcpy(buffer, "Escolha a discplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886\0");
-                          send(new_fd,buffer, strlen(buffer),0);
+                          send(new_fd,buffer, LINESIZE, 0);
 
                           /*recebe a mensagem do cliente*/
                           if ((num = recv(new_fd, client_disc_id, 6, 0))== -1 || num == 0) {
