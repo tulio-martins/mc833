@@ -38,6 +38,10 @@ typedef struct {
 
   char comentario_ultima_aula[TEXTSIZE]; /*Formato : texto*/
 
+
+  char usuario[LINESIZE];
+  char senha[LINESIZE];
+
 } Disciplina;
 
 /*funcoes*/
@@ -54,6 +58,8 @@ void showDisciplineInfo (char id[], int new_fd, Disciplina disc[]);
 void getComment(int new_fd, char id[], Disciplina disc[]);
 /*Retorna o indice da disciplina com o id 'id' - retorna '-1' se nao encontrar*/
 int findDiscipline(char id[], Disciplina disc[]);
+/*Conferfe autenticacao do professor para escrever comentario*/
+int tryUserPassword(int new_fd, char id[], Disciplina disc[]);
 
 
 
@@ -75,13 +81,11 @@ int main() {
 
     Disciplina disc[10];
 
-    printf("B\n");
     strcpy(disc[0].id, "MC833\0");
 
-    printf("A\n");
     inicializandoDisciplinas(disc);
 
-    printf("Disciplina : %s\n Titulo : %s\n", disc[0].id, disc[0].titulo);
+    printf("Aberto sistema de tratamento de disciplinas - esperando clientes\n");
 
     /*Cria socket*/
     if ((socket_fd = socket(AF_INET, SOCK_STREAM, 0))== -1) {
@@ -194,22 +198,8 @@ int main() {
                              option = CONNECTION_CLOSED;
                           } else {
 
-                            /*Recebe texto */
-                            strcpy(buffer, "Escreva o texto\0");
-                            send(new_fd,buffer, strlen(buffer),0);
-
-                            if ((num = recv(new_fd, text, TEXTSIZE, 0))== -1 || num == 0) {
-                               /*Caso de erro, pode houver perda de conexao com o
-                                * cliente, portanto conexao deve ser terminada*/
-                               printf("Erro na recepcao de mensagem. Terminando conexao\n");
-                               option = CONNECTION_CLOSED;
-                             } else {
-                               int i = findDiscipline(client_disc_id, disc);
-
-                               if (i < 0 ) {
-                                 printf("Erro na busca de dsiciplinas\n");
-                               } else
-                                 strcpy(disc[i].comentario_ultima_aula, text);
+                            if(tryUserPassword(new_fd, client_disc_id, disc) < 0) {
+                              option = CONNECTION_CLOSED;
                             }
                           }
 
@@ -265,6 +255,8 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[0].sala_de_aula, "CC03\0");
     strcpy(disc[0].horario, "Quinta 10:00 a 12:00\0");
     strcpy(disc[0].comentario_ultima_aula, "\0");
+    strcpy(disc[0].usuario, "edmundo\0");
+    strcpy(disc[0].senha, "edmundo123\0");
 
     printf("B\n");
 
@@ -278,6 +270,8 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[1].sala_de_aula, "CC02\0");
     strcpy(disc[1].horario, "Sexta 14:00 a 16:00\0");
     strcpy(disc[1].comentario_ultima_aula, "\0");
+    strcpy(disc[1].usuario, "zanoni\0");
+    strcpy(disc[1].senha, "zanoni123\0");
 
     strcpy(disc[2].id, "MC536\0");
     strcpy(disc[2].titulo, "Bancos de Dados: Teoria e Pratica\0");
@@ -292,6 +286,8 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[2].sala_de_aula, "CB02\0");
     strcpy(disc[2].horario, "Segunda 10:00 a 12:00; Quarta 10:00 a 12:00");
     strcpy(disc[2].comentario_ultima_aula, "\0");
+    strcpy(disc[0].usuario, " breno\0");
+    strcpy(disc[0].senha, "breno123\0");
 
     strcpy(disc[3].id, "MC358\0");
     strcpy(disc[3].titulo, "Fundamentos Matematicos da Computacao\0");
@@ -299,6 +295,8 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[3].sala_de_aula, "CB02\0");
     strcpy(disc[3].horario, "Terca 19:00 a 21:00; Quarta 19:00 a 21:00\0");
     strcpy(disc[3].comentario_ultima_aula, "\0");
+    strcpy(disc[0].usuario, "arnaldo\0");
+    strcpy(disc[0].senha, "arnaldo123\0");
 
     strcpy(disc[4].id, "MC346\0");
     strcpy(disc[4].titulo, "Programacao de Redes de Computadores\0");
@@ -306,6 +304,8 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[4].sala_de_aula, "CB12\0");
     strcpy(disc[4].horario, "Segunda 16:00 a 18:00; Quarta 16:00 a 18:00\0");
     strcpy(disc[4].comentario_ultima_aula, "\0");
+    strcpy(disc[0].usuario, "wainer\0");
+    strcpy(disc[0].senha, "wainer123\0");
 
     strcpy(disc[5].id, "MC750\0");
     strcpy(disc[5].titulo, "Construcao de Interfaces Homem-Computador\0");
@@ -313,6 +313,8 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[5].sala_de_aula, "CB06\0");
     strcpy(disc[5].horario, "Terca 16:00 a 18:00; Quinta 16:00 a 18:00\0");
     strcpy(disc[5].comentario_ultima_aula, "\0");
+    strcpy(disc[0].usuario, "baranauskas\0");
+    strcpy(disc[0].senha, "baranauskas123\0");
 
     strcpy(disc[6].id, "MC458\0");
     strcpy(disc[6].titulo, "Projeto e Analise de Algoritmos I\0");
@@ -320,6 +322,8 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[6].sala_de_aula, "PB18\0");
     strcpy(disc[6].horario, "Terca 10:00 a 12:00; Quinta 10:00 a 12:00\0");
     strcpy(disc[6].comentario_ultima_aula, "\0");
+    strcpy(disc[0].usuario, "lehilton\0");
+    strcpy(disc[0].senha, "lehilton123\0");
 
     strcpy(disc[7].id, "MC558\0");
     strcpy(disc[7].titulo, "Projeto e Analise de Algoritmos II\0");
@@ -327,6 +331,8 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[7].sala_de_aula, "CB17\0");
     strcpy(disc[7].horario, "Terca 16:00 a 18:00; Quinta 16:00 a 18:00\0" );
     strcpy(disc[7].comentario_ultima_aula, "\0");
+    strcpy(disc[0].usuario, "christiane\0");
+    strcpy(disc[0].senha, "christiane123\0");
 
     strcpy(disc[8].id, "MC658\0");
     strcpy(disc[8].titulo, "Projeto e Analise de Algoritmos III\0");
@@ -334,6 +340,8 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[8].sala_de_aula, "CB13\0");
     strcpy(disc[8].horario, "Segunda 19:00 a 21:00; Quarta 21:00 a 23:00\0");
     strcpy(disc[8].comentario_ultima_aula, "\0");
+    strcpy(disc[0].usuario, "flavio\0");
+    strcpy(disc[0].senha, "flavio123\0");
 
     strcpy(disc[9].id, "MC886\0");
     strcpy(disc[9].titulo, "Aprendizado de Maquina\0");
@@ -341,6 +349,8 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[9].sala_de_aula, "CB01\0");
     strcpy(disc[9].horario, "Segunda 19:00 a 21:00; Quarta 21:00 a 23:00");
     strcpy(disc[9].comentario_ultima_aula, "\0");
+    strcpy(disc[0].usuario, "rocha\0");
+    strcpy(disc[0].senha, "rocha123\0");
 
 
 }
@@ -363,6 +373,7 @@ void listDiscplines(int new_fd, Disciplina disc[]) {
 void showDisciplineMenu(char id[], int new_fd, Disciplina disc[]) {
   int i = findDiscipline(id, disc);
 
+  printf("Enviando ementa de disciplina %s\n", id);
   if (i < 0) {
     printf("Erro, disciplina nao encontrada\n");
     send(new_fd, ERROR_MESSAGE, TEXTSIZE, 0);
@@ -370,12 +381,15 @@ void showDisciplineMenu(char id[], int new_fd, Disciplina disc[]) {
     send(new_fd, disc[i].ementa, TEXTSIZE, 0);
   }
 
+  printf("Enviada ementa da disciplina %s\n", id);
+
 }
 
 /*Dado o codigo de uma disciplina, retornar todas as informacoes da mesma*/
 void showDisciplineInfo (char id[], int new_fd, Disciplina disc[]) {
   int i = findDiscipline(id, disc);
 
+  printf("Enviando todas as informacoes de disciplina %s\n", id);
   if (i < 0) {
     printf("Erro, disciplina nao encontrada\n");
     send(new_fd, ERROR_MESSAGE, TEXTSIZE, 0);
@@ -387,18 +401,21 @@ void showDisciplineInfo (char id[], int new_fd, Disciplina disc[]) {
     send(new_fd, disc[i].horario, LINESIZE, 0);
     send(new_fd, disc[i].comentario_ultima_aula, TEXTSIZE, 0);
   }
+  printf("Enviadas todas as informacoes de disciplina %s\n", id);
 }
 
 /*Retornar comentario da ultima aula da mesma disciplina*/
 void getComment(int new_fd, char id[], Disciplina disc[]) {
   int i = findDiscipline(id, disc);
 
+  printf("Enviando comentario da ultima aula da disciplina %s\n", id);
   if (i < 0) {
     printf("Erro, disciplina nao encontrada\n");
     send(new_fd, ERROR_MESSAGE, TEXTSIZE, 0);
   } else {
     send(new_fd, disc[i].comentario_ultima_aula, TEXTSIZE, 0);
   }
+  printf("Enviado comentario da ultima aula da disciplina %s\n", id);
 }
 
 /*Retorna o indice da disciplina com o id 'id' - retorna '-1' se nao encontrar*/
@@ -411,4 +428,80 @@ int findDiscipline(char id[], Disciplina disc[]) {
     }
   }
   return -1;
+}
+
+int tryUserPassword(int new_fd, char id[], Disciplina disc[]) {
+  char buffer[LINESIZE];
+  char client_in[LINESIZE];
+
+  int i = findDiscipline(id, disc);
+  int num;
+
+  if (i < 0) {
+    printf("Erro, disciplina nao encontrada\n");
+    send(new_fd, ERROR_MESSAGE, TEXTSIZE, 0);
+    return 0;
+  }
+
+  strcpy(buffer, "Insira o usuario (0 para sair)\0");
+  send(new_fd,buffer, LINESIZE,0);
+
+  do {
+    if ((num = recv(new_fd, client_in, LINESIZE, 0))== -1 || num == 0) {
+       /*Caso de erro, pode houver perda de conexao com o
+        * cliente, portanto conexao deve ser terminada*/
+       printf("Erro na recepcao de mensagem  terminando conexao\n");
+       return -1;
+    } else {
+       if (strcmp(client_in, disc[i].usuario) == 0) {
+         strcpy(buffer, "Insira a senha (0 para sair)\0");
+         send(new_fd,buffer, LINESIZE,0);
+
+         do {
+           if ((num = recv(new_fd, client_in, LINESIZE, 0))== -1 || num == 0) {
+            /*Caso de erro, pode houver perda de conexao com o
+            * cliente, portanto conexao deve ser terminada*/
+            printf("Erro na recepcao de mensagem  terminando conexao\n");
+            return -1;
+           } else if (strcmp(client_in, disc[i].senha) == 0){
+
+             strcpy(buffer, "Escreva o texto\0");
+             send(new_fd,buffer, LINESIZE,0);
+
+             if ((num = recv(new_fd, client_in, LINESIZE, 0))== -1 || num == 0) {
+               /*Caso de erro, pode houver perda de conexao com o
+               * cliente, portanto conexao deve ser terminada*/
+               printf("Erro na recepcao de mensagem  terminando conexao\n");
+               return -1;
+             } else {
+               strcpy(disc[i].comentario_ultima_aula,buffer);
+               printf("Comentario escrito com sucesso\n");
+               strcpy(buffer, "Comentario escrito com sucesso\0");
+               send(new_fd,buffer, LINESIZE,0);
+             }
+
+
+           } else if (strcmp(client_in, "0") == 0) {
+            strcpy(buffer, "Saindo\0");
+            send(new_fd,buffer, LINESIZE,0);
+            return 0;
+           } else {
+            strcpy(buffer, "Tente novamente a senha\0");
+            send(new_fd,buffer, LINESIZE,0);
+           }
+         } while (1);
+
+       } else if (strcmp(client_in, "0\0") == 0) {
+         strcpy(buffer, "Saindo\0");
+         send(new_fd,buffer, LINESIZE,0);
+         return 0;
+       } else {
+         printf("Recebi %s\n", client_in);
+         strcpy(buffer, "Tente novamente o usuario\0");
+         send(new_fd,buffer, LINESIZE,0);
+       }
+    }
+
+  } while (1);
+
 }

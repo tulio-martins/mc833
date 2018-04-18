@@ -62,6 +62,10 @@ int main(int argc, char* argv[]) {
     char buff[LINESIZE];
     char disc_id[6];
     char comment[TEXTSIZE];
+    char client_out[LINESIZE];
+
+    /*flags para autenticacao do professor*/
+    int reset, confirmation;
 
     /*Caso nao exista um IP para o qual conectar com o host*/
     if (argc != 2) {
@@ -167,6 +171,10 @@ int main(int argc, char* argv[]) {
                break;
             case WRITE_COMMENT:
 
+               /*flag para abortar operacao de escrita de comentario*/
+               reset = 0;
+               confirmation = 0;
+
                if ((num = recv(socket_fd, buffer, LINESIZE, 0))== -1 || num == 0) {
                 /*Caso de erro, pode houver perda de conexao com o
                 * cliente, portanto conexao deve ser terminada*/
@@ -187,13 +195,44 @@ int main(int argc, char* argv[]) {
                   printf("Erro na recepcao de mensagem  terminando conexao\n");
                   option = CONNECTION_CLOSED;
                 } else {
-                  printf("%s\n", buffer);
-                  scanf(" %s", disc_id);
+                  printf(" %s\n", buffer);
+                  if(strcmp(buffer, "Erro, disciplina nao encontrada\0") == 0) {
+                    reset = 1;
+                  } else {
+                    scanf(" %s", client_out);
+                    buffer[strlen(client_out)] = '\0';
+                    send(socket_fd, client_out, LINESIZE, 0);
+                  }
 
-                  fgets(comment, TEXTSIZE, stdin);
-                  comment[strlen(comment)] = '\0';
 
-                  send(socket_fd, comment, TEXTSIZE, 0);
+                  while (!reset && !confirmation) {
+                    if ((num = recv(socket_fd, buffer, LINESIZE, 0)) == -1 || num == 0) {
+                      /*Caso de erro, pode houver perda de conexao com o
+                      * cliente, portanto conexao deve ser terminada*/
+                      printf("Erro na recepcao de mensagem  terminando conexao\n");
+                      option = CONNECTION_CLOSED;
+                    } else {
+                      if (strcmp (buffer, "Saindo\0") == 0) {
+                        reset = 1;
+                      } else if (strcmp (buffer, "Escreva o texto\0") == 0) {
+                        confirmation = 1;
+                      } else {
+                        printf(" %s\n", buffer);
+                        scanf(" %s", client_out);
+                        buffer[strlen(client_out)] = '\0';
+                        send(socket_fd, client_out, LINESIZE, 0);
+                      }
+                    }
+
+
+                  };
+
+                  if (!reset && confirmation) {
+                    fgets(comment, TEXTSIZE, stdin);
+                    comment[strlen(comment)] = '\0';
+
+                    send(socket_fd, comment, TEXTSIZE, 0);
+                  }
                 }
                }
 
