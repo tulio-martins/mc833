@@ -21,7 +21,7 @@
 
 #define ERROR_MESSAGE "Erro, disciplina nao encontrada\0"
 
-#define PORT 8080
+#define PORT 3456
 #define BACKLOG 10
 
 #define TEXTSIZE 32768
@@ -43,7 +43,7 @@ typedef struct {
 /*funcoes*/
 
 /*Inicializa a matriz 'disc' de disciplinas*/
-void inicializandoDisciplinas(Disciplina* disc[10]);
+void inicializandoDisciplinas(Disciplina disc[10]);
 /*Listar codigos das disciplinas com respectivos titulos*/
 void listDiscplines(int new_fd, Disciplina disc[]);
 /*Dado o codigo de uma disciplina, retornar a ementa*/
@@ -75,7 +75,13 @@ int main() {
 
     Disciplina disc[10];
 
-    inicializandoDisciplinas(&disc);
+    printf("B\n");
+    strcpy(disc[0].id, "MC833\0");
+
+    printf("A\n");
+    inicializandoDisciplinas(disc);
+
+    printf("Disciplina : %s\n Titulo : %s\n", disc[0].id, disc[0].titulo);
 
     /*Cria socket*/
     if ((socket_fd = socket(AF_INET, SOCK_STREAM, 0))== -1) {
@@ -162,6 +168,7 @@ int main() {
                              printf("Erro na recepcao de mensagem  terminando conexao\n");
                              option = CONNECTION_CLOSED;
                           } else {
+                            client_disc_id[6] = '\0';
                             showDisciplineInfo(client_disc_id, new_fd, disc);
                           }
 
@@ -248,28 +255,33 @@ int main() {
 
 /*Inicializa informacoes das disciplinas*/
 /*BEM INCOMPLETO AINDA :/ */
-void inicializandoDisciplinas(Disciplina* disc[10]) {
-    strcpy(disc[0]->id, "MC833\0");
-    strcpy(disc[0]->titulo, "Programacao de Redes de Computadores\0");
-    strcpy(disc[0]->ementa, "Programacao utilizando diferentes tecnologias de comunicacao:\
+void inicializandoDisciplinas(Disciplina disc[10]) {
+    printf("A\n");
+
+    strcpy(disc[0].id, "MC833\0");
+    strcpy(disc[0].titulo, "Programacao de Redes de Computadores\0");
+    strcpy(disc[0].ementa, "Programacao utilizando diferentes tecnologias de comunicacao:\
                       sockets, TCP e UDP, e chamada de metodo remoto.\0");
-    strcpy(disc[0]->sala_de_aula, "CC03\0");
-    strcpy(disc[0]->horario, "Quinta 10:00 a 12:00\0");
+    strcpy(disc[0].sala_de_aula, "CC03\0");
+    strcpy(disc[0].horario, "Quinta 10:00 a 12:00\0");
+    strcpy(disc[0].comentario_ultima_aula, "\0");
 
+    printf("B\n");
 
-    strcpy(disc[1]->id, "MC102\0");
-    strcpy(disc[1]->titulo, "Algoritmos e Programacao de Computadores\0");
-    strcpy(disc[1]->ementa, "Conceitos basicos de organizacao de computadores.\
+    strcpy(disc[1].id, "MC102\0");
+    strcpy(disc[1].titulo, "Algoritmos e Programacao de Computadores\0");
+    strcpy(disc[1].ementa, "Conceitos basicos de organizacao de computadores.\
                       Construcao de algoritmos e sua representacao em pseudocodigo\
                       e linguagens de alto nivel. Desenvolvimento sistematico e \
                       implementacao de programas. Estruturacao, depuracao, testes\
                        e documentacao de programas. Resolucao de problemas.\0");
-    strcpy(disc[1]->sala_de_aula, "CC02\0");
-    strcpy(disc[1]->horario, "Sexta 14:00 a 16:00\0");
+    strcpy(disc[1].sala_de_aula, "CC02\0");
+    strcpy(disc[1].horario, "Sexta 14:00 a 16:00\0");
+    strcpy(disc[1].comentario_ultima_aula, "\0");
 
-    strcpy(disc[2]->id, "MC536\0");
-    strcpy(disc[2]->titulo, "Bancos de Dados: Teoria e Pratica\0");
-    strcpy(disc[2]->ementa, "Arquiteturas de sistemas de gerenciamento de bancos de dados.\
+    strcpy(disc[2].id, "MC536\0");
+    strcpy(disc[2].titulo, "Bancos de Dados: Teoria e Pratica\0");
+    strcpy(disc[2].ementa, "Arquiteturas de sistemas de gerenciamento de bancos de dados.\
                       Modelagem de dados: modelos conceituais e logicos, incluindo o modelo relacional\
                       e normalizacao. algebra relacional. Linguagens de definicao e de manipulacao de dados.\
                       Otimizacao de consultas. Mecanismos de protecao, recuperacao e seguranca.\
@@ -277,50 +289,58 @@ void inicializandoDisciplinas(Disciplina* disc[10]) {
                       Projeto e desenvolvimento de ferramentas e tecnicas utilizadas na\
                       solucao de problemas de sistemas de informacao, utilizando bancos de dados.\
                       Modelagem, especificacao, projeto e implementacao de aplicacoes em sistemas de informacao.\0");
-    strcpy(disc[2]->sala_de_aula, "CB02\0");
-    strcpy(disc[2]->horario, "Segunda 10:00 a 12:00; Quarta 10:00 a 12:00");
+    strcpy(disc[2].sala_de_aula, "CB02\0");
+    strcpy(disc[2].horario, "Segunda 10:00 a 12:00; Quarta 10:00 a 12:00");
+    strcpy(disc[2].comentario_ultima_aula, "\0");
 
-    strcpy(disc[3]->id, "MC358\0");
-    strcpy(disc[3]->titulo, "Fundamentos Matematicos da Computacao\0");
-    strcpy(disc[3]->ementa, "Conceitos basicos de matematica strcpy(discreta e de logica para computacao.Tecnicas de provas, inducao matematica. Relacoes e conceitos de teoria de grafos. Modelagem de problemas usando grafos.\0");
-    strcpy(disc[3]->sala_de_aula, "CB02\0");
-    strcpy(disc[3]->horario, "Terca 19:00 a 21:00; Quarta 19:00 a 21:00\0");
+    strcpy(disc[3].id, "MC358\0");
+    strcpy(disc[3].titulo, "Fundamentos Matematicos da Computacao\0");
+    strcpy(disc[3].ementa, "Conceitos basicos de matematica strcpy(discreta e de logica para computacao.Tecnicas de provas, inducao matematica. Relacoes e conceitos de teoria de grafos. Modelagem de problemas usando grafos.\0");
+    strcpy(disc[3].sala_de_aula, "CB02\0");
+    strcpy(disc[3].horario, "Terca 19:00 a 21:00; Quarta 19:00 a 21:00\0");
+    strcpy(disc[3].comentario_ultima_aula, "\0");
 
-    strcpy(disc[4]->id, "MC346\0");
-    strcpy(disc[4]->titulo, "Programacao de Redes de Computadores\0");
-    strcpy(disc[4]->ementa, "Visao comparativa de paradigmas de programacao: programacao funcional, programacao logica e programacao rapida (prototipacao).\0");
-    strcpy(disc[4]->sala_de_aula, "CB12\0");
-    strcpy(disc[4]->horario, "Segunda 16:00 a 18:00; Quarta 16:00 a 18:00\0");
+    strcpy(disc[4].id, "MC346\0");
+    strcpy(disc[4].titulo, "Programacao de Redes de Computadores\0");
+    strcpy(disc[4].ementa, "Visao comparativa de paradigmas de programacao: programacao funcional, programacao logica e programacao rapida (prototipacao).\0");
+    strcpy(disc[4].sala_de_aula, "CB12\0");
+    strcpy(disc[4].horario, "Segunda 16:00 a 18:00; Quarta 16:00 a 18:00\0");
+    strcpy(disc[4].comentario_ultima_aula, "\0");
 
-    strcpy(disc[5]->id, "MC750\0");
-    strcpy(disc[5]->titulo, "Construcao de Interfaces Homem-Computador\0");
-    strcpy(disc[5]->ementa, "Introducao a Interfaces Humano-Computador (IHC). Aspectos humanos. Aspectos tecnologicos. Processos, metodos e tecnicas de pesquisa, design e avaliacao. Ferramentas de suporte. Concepcao, modelagem e prototipacao de solucoes em interfaces de usuario.\0");
-    strcpy(disc[5]->sala_de_aula, "CB06\0");
-    strcpy(disc[5]->horario, "Terca 16:00 a 18:00; Quinta 16:00 a 18:00\0");
+    strcpy(disc[5].id, "MC750\0");
+    strcpy(disc[5].titulo, "Construcao de Interfaces Homem-Computador\0");
+    strcpy(disc[5].ementa, "Introducao a Interfaces Humano-Computador (IHC). Aspectos humanos. Aspectos tecnologicos. Processos, metodos e tecnicas de pesquisa, design e avaliacao. Ferramentas de suporte. Concepcao, modelagem e prototipacao de solucoes em interfaces de usuario.\0");
+    strcpy(disc[5].sala_de_aula, "CB06\0");
+    strcpy(disc[5].horario, "Terca 16:00 a 18:00; Quinta 16:00 a 18:00\0");
+    strcpy(disc[5].comentario_ultima_aula, "\0");
 
-    strcpy(disc[6]->id, "MC458\0");
-    strcpy(disc[6]->titulo, "Projeto e Analise de Algoritmos I\0");
-    strcpy(disc[6]->ementa, "Tecnicas de projeto e analise de algoritmos. Ferramental Matematico para Analise de Algoritmos. Projeto de algoritmos por inducao. Busca, ordenacao e estatisticas de ordem. Programacao Dinâmica. Algoritmos Gulosos.\0");
-    strcpy(disc[6]->sala_de_aula, "PB18\0");
-    strcpy(disc[6]->horario, "Terca 10:00 a 12:00; Quinta 10:00 a 12:00\0");
+    strcpy(disc[6].id, "MC458\0");
+    strcpy(disc[6].titulo, "Projeto e Analise de Algoritmos I\0");
+    strcpy(disc[6].ementa, "Tecnicas de projeto e analise de algoritmos. Ferramental Matematico para Analise de Algoritmos. Projeto de algoritmos por inducao. Busca, ordenacao e estatisticas de ordem. Programacao Dinâmica. Algoritmos Gulosos.\0");
+    strcpy(disc[6].sala_de_aula, "PB18\0");
+    strcpy(disc[6].horario, "Terca 10:00 a 12:00; Quinta 10:00 a 12:00\0");
+    strcpy(disc[6].comentario_ultima_aula, "\0");
 
-    strcpy(disc[7]->id, "MC558\0");
-    strcpy(disc[7]->titulo, "Projeto e Analise de Algoritmos II\0");
-    strcpy(disc[7]->ementa, "Grafos: conceitos e algoritmos. Reducoes entre problemas. Programacao Linear. Classes de Problemas.\0");
-    strcpy(disc[7]->sala_de_aula, "CB17\0");
-    strcpy(disc[7]->horario, "Terca 16:00 a 18:00; Quinta 16:00 a 18:00\0" );
+    strcpy(disc[7].id, "MC558\0");
+    strcpy(disc[7].titulo, "Projeto e Analise de Algoritmos II\0");
+    strcpy(disc[7].ementa, "Grafos: conceitos e algoritmos. Reducoes entre problemas. Programacao Linear. Classes de Problemas.\0");
+    strcpy(disc[7].sala_de_aula, "CB17\0");
+    strcpy(disc[7].horario, "Terca 16:00 a 18:00; Quinta 16:00 a 18:00\0" );
+    strcpy(disc[7].comentario_ultima_aula, "\0");
 
-    strcpy(disc[8]->id, "MC658\0");
-    strcpy(disc[8]->titulo, "Projeto e Analise de Algoritmos III\0");
-    strcpy(disc[8]->ementa, "Tratamento de Problemas NP-dificeis: algoritmos exatos, algoritmos aproximados e algoritmos heuristicos.\0");
-    strcpy(disc[8]->sala_de_aula, "CB13\0");
-    strcpy(disc[8]->horario, "Segunda 19:00 a 21:00; Quarta 21:00 a 23:00\0");
+    strcpy(disc[8].id, "MC658\0");
+    strcpy(disc[8].titulo, "Projeto e Analise de Algoritmos III\0");
+    strcpy(disc[8].ementa, "Tratamento de Problemas NP-dificeis: algoritmos exatos, algoritmos aproximados e algoritmos heuristicos.\0");
+    strcpy(disc[8].sala_de_aula, "CB13\0");
+    strcpy(disc[8].horario, "Segunda 19:00 a 21:00; Quarta 21:00 a 23:00\0");
+    strcpy(disc[8].comentario_ultima_aula, "\0");
 
-    strcpy(disc[9]->id, "MC886\0");
-    strcpy(disc[9]->titulo, "Aprendizado de Maquina\0");
-    strcpy(disc[9]->ementa, "Tecnicas de aprendizado de maquina estatistico para classificacao, agrupamento e deteccao de outliers.\0");
-    strcpy(disc[8]->sala_de_aula, "CB01\0");
-    strcpy(disc[8]->horario, "Segunda 19:00 a 21:00; Quarta 21:00 a 23:00");
+    strcpy(disc[9].id, "MC886\0");
+    strcpy(disc[9].titulo, "Aprendizado de Maquina\0");
+    strcpy(disc[9].ementa, "Tecnicas de aprendizado de maquina estatistico para classificacao, agrupamento e deteccao de outliers.\0");
+    strcpy(disc[9].sala_de_aula, "CB01\0");
+    strcpy(disc[9].horario, "Segunda 19:00 a 21:00; Quarta 21:00 a 23:00");
+    strcpy(disc[9].comentario_ultima_aula, "\0");
 
 
 }
