@@ -171,7 +171,9 @@ int main(int argc, char* argv[]) {
                break;
             case WRITE_COMMENT:
 
-               /*flag para abortar operacao de escrita de comentario*/
+               /*flags para abortar operacao de escrita de comentario
+                *reset - se o comando de saida foi inserido (0)
+                *confirmation - se o servidor aceitou escrita do comentario*/
                reset = 0;
                confirmation = 0;
 
@@ -182,6 +184,7 @@ int main(int argc, char* argv[]) {
                 option = CONNECTION_CLOSED;
                } else {
 
+                /*Recebendo prieira mensagem padrao do servidor requisitando disciplina*/
                 printf("%s\n", buffer);
                 scanf(" %s", disc_id);
 
@@ -195,28 +198,41 @@ int main(int argc, char* argv[]) {
                   printf("Erro na recepcao de mensagem  terminando conexao\n");
                   option = CONNECTION_CLOSED;
                 } else {
+
+                  /*Recebendo se a disciplina foi valida*/
                   printf(" %s\n", buffer);
                   if(strcmp(buffer, "Erro, disciplina nao encontrada\0") == 0) {
+                    /*Se a disciplina nao for valida, volta para menu principal*/
                     reset = 1;
                   } else {
+
+                    /*Se a disciplina eh correta, inicia-se o processo enviando o usuario*/
                     scanf(" %s", client_out);
                     buffer[strlen(client_out)] = '\0';
                     send(socket_fd, client_out, LINESIZE, 0);
                   }
 
 
-                  while (!reset && !confirmation) {
+                 /*Loop de envio de mensagens sejam usuarios ou senhas, ate que o Servidor
+                 *envire bandeira verde para escrever o comentario. Esta representada
+                 * pela mensagem "Escreva o texto\0"*/
+                 while (!reset && !confirmation) {
                     if ((num = recv(socket_fd, buffer, LINESIZE, 0)) == -1 || num == 0) {
                       /*Caso de erro, pode houver perda de conexao com o
                       * cliente, portanto conexao deve ser terminada*/
                       printf("Erro na recepcao de mensagem  terminando conexao\n");
                       option = CONNECTION_CLOSED;
                     } else {
+
+                      /*Se foi escolhida opcao de saida, termina*/
                       if (strcmp (buffer, "Saindo\0") == 0) {
                         reset = 1;
                       } else if (strcmp (buffer, "Escreva o texto\0") == 0) {
+                        /*Se consegue escrever o comentario pula para ultima etapa*/
                         confirmation = 1;
                       } else {
+
+                        /*Comando repetido para insercoes de usuario e senha*/
                         printf(" %s\n", buffer);
                         scanf(" %s", client_out);
                         buffer[strlen(client_out)] = '\0';
@@ -227,9 +243,13 @@ int main(int argc, char* argv[]) {
 
                   };
 
+                  /*Condicional para escrita do comentario*/
                   if (!reset && confirmation) {
-                    fgets(comment, TEXTSIZE, stdin);
-                    comment[strlen(comment)] = '\0';
+
+                    /*Envio do comentario*/
+                    printf(" %s\n", buffer);
+                    scanf(" "); //ignorando espacos para o fgets
+                    fgets(comment, TEXTSIZE, stdin); //scanf nao funciona pois eh um texto
 
                     send(socket_fd, comment, TEXTSIZE, 0);
                   }
