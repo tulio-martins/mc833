@@ -19,7 +19,7 @@
 #define EXIT              '7'
 #define CONNECTION_CLOSED '8'
 
-#define ERROR_MESSAGE "Erro, disciplina nao encontrada\0"
+#define ERROR_MESSAGE "Erro, disciplina nao encontrada"
 
 #define PORT 3456
 #define BACKLOG 10
@@ -49,7 +49,7 @@ typedef struct {
 /*Inicializa a matriz 'disc' de disciplinas*/
 void inicializandoDisciplinas(Disciplina disc[10]);
 /*Listar codigos das disciplinas com respectivos titulos*/
-void listDiscplines(int new_fd, Disciplina disc[]);
+void listDisciplines(int new_fd, Disciplina disc[]);
 /*Dado o codigo de uma disciplina, retornar a ementa*/
 void showDisciplineMenu(char id[], int new_fd, Disciplina disc[]);
 /*Dado o codigo de uma disciplina, retornar todas as informacoes da mesma*/
@@ -140,12 +140,12 @@ int main() {
                    switch (option) {
                        case LIST_DISCIPLINES:
 
-                          listDiscplines(new_fd, disc);
+                          listDisciplines(new_fd, disc);
                           break;
 
                        case DISCIPLINE_MENU:
 
-                          strcpy(buffer, "Escolha a discplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886\0");
+                          strcpy(buffer, "Escolha a disciplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886");
                           send(new_fd,buffer, LINESIZE, 0);
 
                           /*recebe a mensagem do cliente*/
@@ -163,7 +163,7 @@ int main() {
 
                        case DISCIPLINE_INFO:
 
-                          strcpy(buffer, "Escolha a discplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886\0");
+                          strcpy(buffer, "Escolha a disciplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886");
                           send(new_fd,buffer, strlen(buffer),0);
 
                           if ((num = recv(new_fd, client_disc_id, 6, 0))== -1 || num == 0) {
@@ -188,7 +188,7 @@ int main() {
 
                        case WRITE_COMMENT:
 
-                          strcpy(buffer, "Escolha a discplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886\0");
+                          strcpy(buffer, "Escolha a disciplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886\0");
                           send(new_fd,buffer, strlen(buffer),0);
 
                           if ((num = recv(new_fd, client_disc_id, 6, 0))== -1 || num == 0) {
@@ -209,13 +209,13 @@ int main() {
 
                        case NEXT_CLASS_COMM:
 
-                          strcpy(buffer, "Escolha a discplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886\0");
+                          strcpy(buffer, "Escolha a disciplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886");
                           send(new_fd,buffer, strlen(buffer),0);
 
                           if ((num = recv(new_fd, client_disc_id, 6, 0))== -1 || num == 0) {
                              /*Caso de erro, pode houver perda de conexao com o
                               * cliente, portanto conexao deve ser terminada*/
-                             printf("Erro na recepcao de mensagem  terminando conexao\n");
+                             printf("Erro na recepcao de mensagem  terminando conexao aloooo\n");
                              option = CONNECTION_CLOSED;
                           } else {
                             getComment(new_fd, client_disc_id, disc);
@@ -355,7 +355,7 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
 
 
 /*Listar codigos das disciplinas com respectivos titulos*/
-void listDiscplines(int new_fd, Disciplina disc[]) {
+void listDisciplines(int new_fd, Disciplina disc[]) {
 
     printf("Enviando lista de disciplinas\n");
     for(int i = 0; i < 10; i++) {
@@ -445,7 +445,9 @@ int tryUserPassword(int new_fd, char id[], Disciplina disc[]) {
 
   /*Requisita usuario*/
   strcpy(buffer, "Insira o usuario (0 para sair)\0");
-  send(new_fd,buffer, LINESIZE,0);
+  /*COLOQUEI PARA MANDAR SÓ O TAMANHO DO BUFFER. AI PAROU DE DAR ERRO. MAS NAO
+  SEI SE PARA DE DAR ERRO COM A AUTENTICACAO */
+  send(new_fd, buffer, strlen(buffer), 0);
 
 
   /*A espera do usuario valido ou do comando 0 de saida*/
@@ -457,13 +459,14 @@ int tryUserPassword(int new_fd, char id[], Disciplina disc[]) {
        printf("Erro na recepcao de mensagem  terminando conexao\n");
        return -1;
     } else {
+        printf("cliente: %s\n", client_in);
 
        /*Usuario correto*/
        if (strcmp(client_in, disc[i].usuario) == 0) {
 
          /*Requisita senha correta*/
          strcpy(buffer, "Insira a senha (0 para sair)\0");
-         send(new_fd,buffer, LINESIZE,0);
+         send(new_fd, buffer, LINESIZE,0);
 
          /*A espera da senha correta ou do comando de saida 0*/
          do {

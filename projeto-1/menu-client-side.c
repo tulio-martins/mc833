@@ -25,7 +25,7 @@
 As disciplinas disponiveis sao: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886\n\
 As opcoes disponiveis sao:\n\
   1 - lista todos os codigos de disciplinas com seus respectivos titulos\n\
-  2 - dado o coidog de uma disciplina retorna a ementa\n\
+  2 - dado o codigo de uma disciplina retorna a ementa\n\
   3 - dado o codigo de uma disciplina, retorna todas as informacoes desta disciplina\n\
   4 - lista todas as informacoes de todas as disciplinas\n\
   5 - escreve um comentario sobre a proxima aula de uma disciplina\n\
