@@ -69,12 +69,11 @@ int main() {
 
     struct sockaddr_in server;
     struct sockaddr_in dest;
-    int status,socket_fd, new_fd,num;
+    int socket_fd, new_fd,num;
     socklen_t size;
     pid_t pid;
 
     char buffer[LINESIZE];
-    char text[TEXTSIZE];
     char client_disc_id[6];
     int yes =1;
 
@@ -246,7 +245,6 @@ int main() {
 }
 
 /*Inicializa informacoes das disciplinas*/
-/*BEM INCOMPLETO AINDA :/ */
 void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[0].id, "MC833\0");
     strcpy(disc[0].titulo, "Programacao de Redes de Computadores\0");
@@ -254,36 +252,25 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
                       sockets, TCP e UDP, e chamada de metodo remoto.\0");
     strcpy(disc[0].sala_de_aula, "CC03\0");
     strcpy(disc[0].horario, "Quinta 10:00 a 12:00\0");
-    strcpy(disc[0].comentario_ultima_aula, "\0");
+    strcpy(disc[0].comentario_ultima_aula, "mc833.txt\0");
     strcpy(disc[0].usuario, "edmundo\0");
     strcpy(disc[0].senha, "edmundo123\0");
 
     strcpy(disc[1].id, "MC102\0");
     strcpy(disc[1].titulo, "Algoritmos e Programacao de Computadores\0");
-    strcpy(disc[1].ementa, "Conceitos basicos de organizacao de computadores.\
-                      Construcao de algoritmos e sua representacao em pseudocodigo\
-                      e linguagens de alto nivel. Desenvolvimento sistematico e \
-                      implementacao de programas. Estruturacao, depuracao, testes\
-                       e documentacao de programas. Resolucao de problemas.\0");
+    strcpy(disc[1].ementa, "Conceitos basicos de organizacao de computadores. Construcao de algoritmos e sua representacao em pseudocodigo e linguagens de alto nivel. Desenvolvimento sistematico e implementacao de programas. Estruturacao, depuracao, testes e documentacao de programas. Resolucao de problemas.\0");
     strcpy(disc[1].sala_de_aula, "CC02\0");
     strcpy(disc[1].horario, "Sexta 14:00 a 16:00\0");
-    strcpy(disc[1].comentario_ultima_aula, "\0");
+    strcpy(disc[1].comentario_ultima_aula, "mc102.txt\0");
     strcpy(disc[1].usuario, "zanoni\0");
     strcpy(disc[1].senha, "zanoni123\0");
 
     strcpy(disc[2].id, "MC536\0");
     strcpy(disc[2].titulo, "Bancos de Dados: Teoria e Pratica\0");
-    strcpy(disc[2].ementa, "Arquiteturas de sistemas de gerenciamento de bancos de dados.\
-                      Modelagem de dados: modelos conceituais e logicos, incluindo o modelo relacional\
-                      e normalizacao. algebra relacional. Linguagens de definicao e de manipulacao de dados.\
-                      Otimizacao de consultas. Mecanismos de protecao, recuperacao e seguranca.\
-                      Controle de concorrência. Bancos de dados nao relacionais.\
-                      Projeto e desenvolvimento de ferramentas e tecnicas utilizadas na\
-                      solucao de problemas de sistemas de informacao, utilizando bancos de dados.\
-                      Modelagem, especificacao, projeto e implementacao de aplicacoes em sistemas de informacao.\0");
+    strcpy(disc[2].ementa, "Arquiteturas de sistemas de gerenciamento de bancos de dados. Modelagem de dados: modelos conceituais e logicos, incluindo o modelo relacional e normalizacao. algebra relacional. Linguagens de definicao e de manipulacao de dados. Otimizacao de consultas. Mecanismos de protecao, recuperacao e seguranca. Controle de concorrência. Bancos de dados nao relacionais. Projeto e desenvolvimento de ferramentas e tecnicas utilizadas na solucao de problemas de sistemas de informacao, utilizando bancos de dados. Modelagem, especificacao, projeto e implementacao de aplicacoes em sistemas de informacao.\0");
     strcpy(disc[2].sala_de_aula, "CB02\0");
-    strcpy(disc[2].horario, "Segunda 10:00 a 12:00; Quarta 10:00 a 12:00");
-    strcpy(disc[2].comentario_ultima_aula, "\0");
+    strcpy(disc[2].horario, "Segunda 10:00 a 12:00; Quarta 10:00 a 12:00\0 ");
+    strcpy(disc[2].comentario_ultima_aula, "mc536.txt\0");
     strcpy(disc[2].usuario, " breno\0");
     strcpy(disc[2].senha, "breno123\0");
 
@@ -292,7 +279,7 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[3].ementa, "Conceitos basicos de matematica strcpy(discreta e de logica para computacao.Tecnicas de provas, inducao matematica. Relacoes e conceitos de teoria de grafos. Modelagem de problemas usando grafos.\0");
     strcpy(disc[3].sala_de_aula, "CB02\0");
     strcpy(disc[3].horario, "Terca 19:00 a 21:00; Quarta 19:00 a 21:00\0");
-    strcpy(disc[3].comentario_ultima_aula, "\0");
+    strcpy(disc[3].comentario_ultima_aula, "mc358.txt\0");
     strcpy(disc[3].usuario, "arnaldo\0");
     strcpy(disc[3].senha, "arnaldo123\0");
 
@@ -301,7 +288,7 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[4].ementa, "Visao comparativa de paradigmas de programacao: programacao funcional, programacao logica e programacao rapida (prototipacao).\0");
     strcpy(disc[4].sala_de_aula, "CB12\0");
     strcpy(disc[4].horario, "Segunda 16:00 a 18:00; Quarta 16:00 a 18:00\0");
-    strcpy(disc[4].comentario_ultima_aula, "\0");
+    strcpy(disc[4].comentario_ultima_aula, "mc346.txt\0");
     strcpy(disc[4].usuario, "wainer\0");
     strcpy(disc[4].senha, "wainer123\0");
 
@@ -310,7 +297,7 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[5].ementa, "Introducao a Interfaces Humano-Computador (IHC). Aspectos humanos. Aspectos tecnologicos. Processos, metodos e tecnicas de pesquisa, design e avaliacao. Ferramentas de suporte. Concepcao, modelagem e prototipacao de solucoes em interfaces de usuario.\0");
     strcpy(disc[5].sala_de_aula, "CB06\0");
     strcpy(disc[5].horario, "Terca 16:00 a 18:00; Quinta 16:00 a 18:00\0");
-    strcpy(disc[5].comentario_ultima_aula, "\0");
+    strcpy(disc[5].comentario_ultima_aula, "mc750.txt\0");
     strcpy(disc[5].usuario, "baranauskas\0");
     strcpy(disc[5].senha, "baranauskas123\0");
 
@@ -319,7 +306,7 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[6].ementa, "Tecnicas de projeto e analise de algoritmos. Ferramental Matematico para Analise de Algoritmos. Projeto de algoritmos por inducao. Busca, ordenacao e estatisticas de ordem. Programacao Dinâmica. Algoritmos Gulosos.\0");
     strcpy(disc[6].sala_de_aula, "PB18\0");
     strcpy(disc[6].horario, "Terca 10:00 a 12:00; Quinta 10:00 a 12:00\0");
-    strcpy(disc[6].comentario_ultima_aula, "\0");
+    strcpy(disc[6].comentario_ultima_aula, "mc458.txt\0");
     strcpy(disc[6].usuario, "lehilton\0");
     strcpy(disc[6].senha, "lehilton123\0");
 
@@ -328,7 +315,7 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[7].ementa, "Grafos: conceitos e algoritmos. Reducoes entre problemas. Programacao Linear. Classes de Problemas.\0");
     strcpy(disc[7].sala_de_aula, "CB17\0");
     strcpy(disc[7].horario, "Terca 16:00 a 18:00; Quinta 16:00 a 18:00\0" );
-    strcpy(disc[7].comentario_ultima_aula, "\0");
+    strcpy(disc[7].comentario_ultima_aula, "mc558.txt\0");
     strcpy(disc[7].usuario, "christiane\0");
     strcpy(disc[7].senha, "christiane123\0");
 
@@ -337,7 +324,7 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[8].ementa, "Tratamento de Problemas NP-dificeis: algoritmos exatos, algoritmos aproximados e algoritmos heuristicos.\0");
     strcpy(disc[8].sala_de_aula, "CB13\0");
     strcpy(disc[8].horario, "Segunda 19:00 a 21:00; Quarta 21:00 a 23:00\0");
-    strcpy(disc[8].comentario_ultima_aula, "\0");
+    strcpy(disc[8].comentario_ultima_aula, "mc658.txt\0");
     strcpy(disc[8].usuario, "flavio\0");
     strcpy(disc[8].senha, "flavio123\0");
 
@@ -345,8 +332,8 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[9].titulo, "Aprendizado de Maquina\0");
     strcpy(disc[9].ementa, "Tecnicas de aprendizado de maquina estatistico para classificacao, agrupamento e deteccao de outliers.\0");
     strcpy(disc[9].sala_de_aula, "CB01\0");
-    strcpy(disc[9].horario, "Segunda 19:00 a 21:00; Quarta 21:00 a 23:00");
-    strcpy(disc[9].comentario_ultima_aula, "\0");
+    strcpy(disc[9].horario, "Segunda 19:00 a 21:00; Quarta 21:00 a 23:00\0");
+    strcpy(disc[9].comentario_ultima_aula, "mc886.txt\0");
     strcpy(disc[9].usuario, "rocha\0");
     strcpy(disc[9].senha, "rocha123\0");
 
@@ -386,6 +373,8 @@ void showDisciplineMenu(char id[], int new_fd, Disciplina disc[]) {
 /*Dado o codigo de uma disciplina, retornar todas as informacoes da mesma*/
 void showDisciplineInfo (char id[], int new_fd, Disciplina disc[]) {
   int i = findDiscipline(id, disc);
+  FILE* comentario;
+  char comentario_texto[TEXTSIZE];
 
   printf("Enviando todas as informacoes de disciplina %s\n", id);
   if (i < 0) {
@@ -397,7 +386,14 @@ void showDisciplineInfo (char id[], int new_fd, Disciplina disc[]) {
     send(new_fd, disc[i].ementa, TEXTSIZE, 0);
     send(new_fd, disc[i].sala_de_aula, 5, 0);
     send(new_fd, disc[i].horario, LINESIZE, 0);
-    send(new_fd, disc[i].comentario_ultima_aula, TEXTSIZE, 0);
+    comentario = fopen(disc[i].comentario_ultima_aula, "r");
+    if (comentario){
+        fgets(comentario_texto, TEXTSIZE, comentario);
+        fclose(comentario);
+    } else {
+        strcpy(comentario_texto, "N/A\0");
+    }
+    send(new_fd, comentario_texto, TEXTSIZE, 0);
   }
   printf("Enviadas todas as informacoes de disciplina %s\n", id);
 }
@@ -405,13 +401,22 @@ void showDisciplineInfo (char id[], int new_fd, Disciplina disc[]) {
 /*Retornar comentario da ultima aula da mesma disciplina*/
 void getComment(int new_fd, char id[], Disciplina disc[]) {
   int i = findDiscipline(id, disc);
+  FILE* comentario;
+  char comentario_texto[TEXTSIZE];
 
   printf("Enviando comentario da ultima aula da disciplina %s\n", id);
   if (i < 0) {
     printf("Erro, disciplina nao encontrada\n");
     send(new_fd, ERROR_MESSAGE, TEXTSIZE, 0);
   } else {
-    send(new_fd, disc[i].comentario_ultima_aula, TEXTSIZE, 0);
+      comentario = fopen(disc[i].comentario_ultima_aula, "r");
+      if (comentario){
+          fgets(comentario_texto, TEXTSIZE, comentario);
+          fclose(comentario);
+      } else {
+          strcpy(comentario_texto, "N/A\0");
+      }
+      send(new_fd, comentario_texto, TEXTSIZE, 0);
   }
   printf("Enviado comentario da ultima aula da disciplina %s\n", id);
 }
@@ -433,6 +438,7 @@ int tryUserPassword(int new_fd, char id[], Disciplina disc[]) {
   char buffer[LINESIZE];
   char client_in[LINESIZE];
   char comment[TEXTSIZE];
+  FILE* comentario;
 
   int i = findDiscipline(id, disc);
   int num;
@@ -492,7 +498,9 @@ int tryUserPassword(int new_fd, char id[], Disciplina disc[]) {
                return -1;
              } else {
                /*Guarda texto*/
-               strcpy(disc[i].comentario_ultima_aula, comment);
+               comentario = fopen (disc[i].comentario_ultima_aula, "w");
+               fprintf(comentario, "%s\n", comment);
+               fclose(comentario);
                printf("Comentario escrito com sucesso: %s\n", comment);
                return 1;
              }
