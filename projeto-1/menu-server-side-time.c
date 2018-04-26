@@ -176,8 +176,13 @@ int main() {
 
                        case DISCIPLINE_INFO:
 
+                          tempos = fopen("DISCIPLINE_INFO.txt", "a");
+                          gettimeofday(&t1, NULL);
                           strcpy(buffer, "Escolha a disciplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886");
                           send(new_fd,buffer, strlen(buffer),0);
+                          gettimeofday(&t2, NULL);
+                          elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000000.0;      // sec to ms
+                          elapsedTime += (t2.tv_usec - t1.tv_usec);
 
                           if ((num = recv(new_fd, client_disc_id, 6, 0))== -1 || num == 0) {
                              /*Caso de erro, pode houver perda de conexao com o
@@ -186,16 +191,29 @@ int main() {
                              option = CONNECTION_CLOSED;
                           } else {
                             client_disc_id[6] = '\0';
+                            gettimeofday(&t1, NULL);
                             showDisciplineInfo(client_disc_id, new_fd, disc);
+                            gettimeofday(&t2, NULL);
+                            elapsedTime += (t2.tv_sec - t1.tv_sec) * 1000000.0;      // sec to ms
+                            elapsedTime += (t2.tv_usec - t1.tv_usec);
                           }
+                          fprintf(tempos, "%lf,", elapsedTime);
+                          fclose(tempos);
 
                           break;
 
                        case ALL_DISCIPL_INFO:
 
+                          tempos = fopen("ALL_DISCIPL_INFO.txt", "a");
+                          gettimeofday(&t1, NULL);
                           for(int i = 0; i < 10; i++) {
                               showDisciplineInfo(disc[i].id, new_fd, disc);
                           }
+                          gettimeofday(&t2, NULL);
+                          elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000000.0;      // sec to ms
+                          elapsedTime += (t2.tv_usec - t1.tv_usec);
+                          fprintf(tempos, "%lf,", elapsedTime);
+                          fclose(tempos);
 
                           break;
 
@@ -222,8 +240,15 @@ int main() {
 
                        case NEXT_CLASS_COMM:
 
+                          tempos = fopen("NEXT_CLASS_COMM.txt", "a");
+
+                          gettimeofday(&t1, NULL);
                           strcpy(buffer, "Escolha a disciplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886");
                           send(new_fd,buffer, strlen(buffer),0);
+
+                          gettimeofday(&t2, NULL);
+                          elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000000.0;      // sec to ms
+                          elapsedTime += (t2.tv_usec - t1.tv_usec);
 
                           if ((num = recv(new_fd, client_disc_id, 6, 0))== -1 || num == 0) {
                              /*Caso de erro, pode houver perda de conexao com o
@@ -231,8 +256,15 @@ int main() {
                              printf("Erro na recepcao de mensagem  terminando conexao aloooo\n");
                              option = CONNECTION_CLOSED;
                           } else {
+                            gettimeofday(&t1, NULL);
                             getComment(new_fd, client_disc_id, disc);
+
+                            gettimeofday(&t2, NULL);
+                            elapsedTime += (t2.tv_sec - t1.tv_sec) * 1000000.0;      // sec to ms
+                            elapsedTime += (t2.tv_usec - t1.tv_usec);
                           }
+                          fprintf(tempos, "%lf,", elapsedTime);
+                          fclose(tempos);
 
                           break;
 
@@ -453,9 +485,16 @@ int tryUserPassword(int new_fd, char id[], Disciplina disc[]) {
   char comment[TEXTSIZE];
   FILE* comentario;
 
+  FILE* tempos;
+
+  struct timeval t1, t2;
+  double elapsedTime = 0;
+
   int i = findDiscipline(id, disc);
   int num;
 
+
+  tempos = fopen("WRITE_COMMENT.txt", "a");
   /*Caso nao consiga encontrar a disciplina*/
   if (i < 0) {
     printf("Erro, disciplina nao encontrada\n");
@@ -463,11 +502,16 @@ int tryUserPassword(int new_fd, char id[], Disciplina disc[]) {
     return 0;
   }
 
+  gettimeofday(&t1, NULL);
   /*Requisita usuario*/
   strcpy(buffer, "Insira o usuario (0 para sair)\0");
   /*COLOQUEI PARA MANDAR SÓ O TAMANHO DO BUFFER. AI PAROU DE DAR ERRO. MAS NAO
   SEI SE PARA DE DAR ERRO COM A AUTENTICACAO */
   send(new_fd, buffer, LINESIZE, 0);
+
+  gettimeofday(&t2, NULL);
+  elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000000.0;      // sec to ms
+  elapsedTime += (t2.tv_usec - t1.tv_usec);
 
 
   /*A espera do usuario valido ou do comando 0 de saida*/
@@ -479,6 +523,8 @@ int tryUserPassword(int new_fd, char id[], Disciplina disc[]) {
        printf("Erro na recepcao de mensagem  terminando conexao\n");
        return -1;
     } else {
+
+        gettimeofday(&t1, NULL);
         printf("cliente: %s\n", client_in);
 
        /*Usuario correto*/
@@ -488,6 +534,9 @@ int tryUserPassword(int new_fd, char id[], Disciplina disc[]) {
          strcpy(buffer, "Insira a senha (0 para sair)\0");
          send(new_fd, buffer, LINESIZE,0);
 
+         gettimeofday(&t2, NULL);
+         elapsedTime += (t2.tv_sec - t1.tv_sec) * 1000000.0;      // sec to ms
+         elapsedTime += (t2.tv_usec - t1.tv_usec);
          /*A espera da senha correta ou do comando de saida 0*/
          do {
            if ((num = recv(new_fd, client_in, LINESIZE, 0))== -1 || num == 0) {
@@ -499,10 +548,14 @@ int tryUserPassword(int new_fd, char id[], Disciplina disc[]) {
 
            } else if (strcmp(client_in, disc[i].senha) == 0){
 
-
+             gettimeofday(&t1, NULL);
              /*Senha correta a espera do texto*/
              strcpy(buffer, "Escreva o texto\0");
              send(new_fd,buffer, LINESIZE,0);
+
+             gettimeofday(&t2, NULL);
+             elapsedTime += (t2.tv_sec - t1.tv_sec) * 1000000.0;      // sec to ms
+             elapsedTime += (t2.tv_usec - t1.tv_usec);
 
              if ((num = recv(new_fd, comment, TEXTSIZE, 0))== -1 || num == 0) {
                /*Caso de erro, pode houver perda de conexao com o
@@ -511,10 +564,20 @@ int tryUserPassword(int new_fd, char id[], Disciplina disc[]) {
                return -1;
              } else {
                /*Guarda texto*/
+
+               gettimeofday(&t1, NULL);
                comentario = fopen (disc[i].comentario_ultima_aula, "w");
                fprintf(comentario, "%s\n", comment);
                fclose(comentario);
                printf("Comentario escrito com sucesso: %s\n", comment);
+
+               gettimeofday(&t2, NULL);
+               elapsedTime += (t2.tv_sec - t1.tv_sec) * 1000000.0;      // sec to ms
+               elapsedTime += (t2.tv_usec - t1.tv_usec);
+
+               fprintf(tempos, "%lf,", elapsedTime);
+               fclose(tempos);
+
                return 1;
              }
 
@@ -525,6 +588,7 @@ int tryUserPassword(int new_fd, char id[], Disciplina disc[]) {
             /*Comando de saida inserido no campo de senha*/
             strcpy(buffer, "Saindo\0");
             send(new_fd,buffer, LINESIZE,0);
+            fclose(tempos);
             return 0;
            } else {
 
@@ -539,6 +603,7 @@ int tryUserPassword(int new_fd, char id[], Disciplina disc[]) {
          /*Comando de saida inserido no campo de usuario*/
          strcpy(buffer, "Saindo\0");
          send(new_fd,buffer, LINESIZE,0);
+         fclose(tempos);
          return 0;
        } else {
 
