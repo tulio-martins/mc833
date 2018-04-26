@@ -1,3 +1,11 @@
+/*******************************************************************************
+* Trabalho 1 - Servidor TCP
+* Professor Edmundo
+* Túlio Martins     RA 177761
+* Nathália Harumi   RA 175188
+* Arquivo: servidor.c
+*******************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -337,9 +345,7 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[9].usuario, "rocha\0");
     strcpy(disc[9].senha, "rocha123\0");
 
-
 }
-
 
 /*Listar codigos das disciplinas com respectivos titulos*/
 void listDisciplines(int new_fd, Disciplina disc[]) {
@@ -452,8 +458,7 @@ int tryUserPassword(int new_fd, char id[], Disciplina disc[]) {
 
   /*Requisita usuario*/
   strcpy(buffer, "Insira o usuario (0 para sair)\0");
-  /*COLOQUEI PARA MANDAR SÓ O TAMANHO DO BUFFER. AI PAROU DE DAR ERRO. MAS NAO
-  SEI SE PARA DE DAR ERRO COM A AUTENTICACAO */
+
   send(new_fd, buffer, LINESIZE, 0);
 
 

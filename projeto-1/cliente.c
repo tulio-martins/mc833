@@ -1,3 +1,11 @@
+/*******************************************************************************
+* Trabalho 1 - Servidor TCP
+* Professor Edmundo
+* Túlio Martins     RA 177761
+* Nathália Harumi   RA 175188
+* Arquivo: cliente.c 
+*******************************************************************************/
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <unistd.h>
@@ -60,8 +68,6 @@ int main(int argc, char* argv[]) {
     int socket_fd,num;
     char buffer[LINESIZE];
 
-
-    char buff[LINESIZE];
     char disc_id[6];
     char comment[TEXTSIZE];
     char client_out[LINESIZE];
