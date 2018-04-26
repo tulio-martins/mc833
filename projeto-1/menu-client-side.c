@@ -9,6 +9,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <pthread.h>
+#include <sys/time.h>
 
 #define LIST_DISCIPLINES   '1'
 #define DISCIPLINE_TABLE   '2' /*ementa da disciplina*/
@@ -58,6 +59,7 @@ int main(int argc, char* argv[]) {
     struct hostent *he;
     int socket_fd,num;
     char buffer[LINESIZE];
+
 
     char buff[LINESIZE];
     char disc_id[6];
@@ -176,6 +178,7 @@ int main(int argc, char* argv[]) {
                 *confirmation - se o servidor aceitou escrita do comentario*/
                reset = 0;
                confirmation = 0;
+               strcpy(buffer, "\0");
 
                if ((num = recv(socket_fd, buffer, LINESIZE, 0))== -1 || num == 0) {
                 /*Caso de erro, pode houver perda de conexao com o

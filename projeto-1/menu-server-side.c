@@ -9,6 +9,7 @@
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <pthread.h>
+#include <sys/time.h>
 
 #define LIST_DISCIPLINES  '1'
 #define DISCIPLINE_MENU   '2' /*ementa da disciplina*/
@@ -432,6 +433,7 @@ int findDiscipline(char id[], Disciplina disc[]) {
 int tryUserPassword(int new_fd, char id[], Disciplina disc[]) {
   char buffer[LINESIZE];
   char client_in[LINESIZE];
+  char comment[TEXTSIZE];
 
   int i = findDiscipline(id, disc);
   int num;
@@ -484,15 +486,15 @@ int tryUserPassword(int new_fd, char id[], Disciplina disc[]) {
              strcpy(buffer, "Escreva o texto\0");
              send(new_fd,buffer, LINESIZE,0);
 
-             if ((num = recv(new_fd, client_in, LINESIZE, 0))== -1 || num == 0) {
+             if ((num = recv(new_fd, comment, TEXTSIZE, 0))== -1 || num == 0) {
                /*Caso de erro, pode houver perda de conexao com o
                * cliente, portanto conexao deve ser terminada*/
                printf("Erro na recepcao de mensagem  terminando conexao\n");
                return -1;
              } else {
                /*Guarda texto*/
-               strcpy(disc[i].comentario_ultima_aula, client_in);
-               printf("Comentario escrito com sucesso: %s\n", client_in);
+               strcpy(disc[i].comentario_ultima_aula, comment);
+               printf("Comentario escrito com sucesso: %s\n", comment);
                return 1;
              }
 
