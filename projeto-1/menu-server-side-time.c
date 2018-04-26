@@ -80,7 +80,7 @@ int main() {
     struct timeval t1, t2, t3, t4;
     double elapsedTime = 0;
 
-    FILE* tempos;
+    FILE* tempos, *t_conexao;
 
     Disciplina disc[10];
 
@@ -132,10 +132,15 @@ int main() {
                close(socket_fd);
                do {
 
+                 t_conexao = fopen("CONEXAO_SERVIDOR.csv", "a");
                  /*recebe a mensagem do cliente*/
                  if ((num = recv(new_fd, &option, 1, 0))== -1 || num == 0) {
                     option = CONNECTION_CLOSED;
                  }
+
+
+
+                 gettimeofday(&t3, NULL);
                    /*Executa a opcao escolhida pelo cliente*/
                    switch (option) {
                        case LIST_DISCIPLINES:
@@ -152,7 +157,15 @@ int main() {
                        case DISCIPLINE_MENU:
                           tempos = fopen("DISCIPLINE_MENU.csv", "a");
                           gettimeofday(&t1, NULL);
+
                           strcpy(buffer, "Escolha a disciplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886");
+                          gettimeofday(&t4, NULL);
+                          elapsedTime = (t4.tv_sec - t3.tv_sec) * 1000000.0;      // sec to ms
+                          elapsedTime += (t4.tv_usec - t3.tv_usec);
+                          fprintf(t_conexao, "%lf,", elapsedTime);
+                          fclose(t_conexao);
+
+
                           send(new_fd,buffer, LINESIZE, 0);
                           gettimeofday(&t2, NULL);
                           elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000000.0;      // sec to ms
