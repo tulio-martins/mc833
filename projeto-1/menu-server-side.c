@@ -34,10 +34,10 @@ typedef struct {
   char titulo[LINESIZE];  /*Formato : linha de texto*/
   char ementa[TEXTSIZE];  /*Formato : texto*/
   char sala_de_aula[5];   /*Formato : CC02\0 (?)*/
-  char horario[LINESIZE]; /*Formato : DIA_DA_SEMANA HH:mm a HH:mm;DIA_DA_SEMANA...\0*/
+  char horario[LINESIZE]; /*Formato : DIA_DA_SEMANA HH:mm a
+                                   HH:mm;DIA_DA_SEMANA...\0*/
 
-  char comentario_ultima_aula[TEXTSIZE]; /*Formato : texto*/
-
+  char comentario_ultima_aula[TEXTSIZE]; /*Formato : Nome_do_arquivo*/
 
   char usuario[LINESIZE];
   char senha[LINESIZE];
