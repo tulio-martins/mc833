@@ -271,7 +271,7 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[2].sala_de_aula, "CB02\0");
     strcpy(disc[2].horario, "Segunda 10:00 a 12:00; Quarta 10:00 a 12:00\0 ");
     strcpy(disc[2].comentario_ultima_aula, "mc536.txt\0");
-    strcpy(disc[2].usuario, " breno\0");
+    strcpy(disc[2].usuario, "breno\0");
     strcpy(disc[2].senha, "breno123\0");
 
     strcpy(disc[3].id, "MC358\0");

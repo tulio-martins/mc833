@@ -139,7 +139,7 @@ int main() {
                    /*Executa a opcao escolhida pelo cliente*/
                    switch (option) {
                        case LIST_DISCIPLINES:
-                          tempos = fopen("LIST_DISCIPLINES.txt", "a");
+                          tempos = fopen("LIST_DISCIPLINES.csv", "a");
                           gettimeofday(&t1, NULL);
                           listDisciplines(new_fd, disc);
                           gettimeofday(&t2, NULL);
@@ -150,7 +150,7 @@ int main() {
                           break;
 
                        case DISCIPLINE_MENU:
-                          tempos = fopen("DISCIPLINE_MENU.txt", "a");
+                          tempos = fopen("DISCIPLINE_MENU.csv", "a");
                           gettimeofday(&t1, NULL);
                           strcpy(buffer, "Escolha a disciplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886");
                           send(new_fd,buffer, LINESIZE, 0);
@@ -176,7 +176,7 @@ int main() {
 
                        case DISCIPLINE_INFO:
 
-                          tempos = fopen("DISCIPLINE_INFO.txt", "a");
+                          tempos = fopen("DISCIPLINE_INFO.csv", "a");
                           gettimeofday(&t1, NULL);
                           strcpy(buffer, "Escolha a disciplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886");
                           send(new_fd,buffer, strlen(buffer),0);
@@ -204,7 +204,7 @@ int main() {
 
                        case ALL_DISCIPL_INFO:
 
-                          tempos = fopen("ALL_DISCIPL_INFO.txt", "a");
+                          tempos = fopen("ALL_DISCIPL_INFO.csv", "a");
                           gettimeofday(&t1, NULL);
                           for(int i = 0; i < 10; i++) {
                               showDisciplineInfo(disc[i].id, new_fd, disc);
@@ -240,7 +240,7 @@ int main() {
 
                        case NEXT_CLASS_COMM:
 
-                          tempos = fopen("NEXT_CLASS_COMM.txt", "a");
+                          tempos = fopen("NEXT_CLASS_COMM.csv", "a");
 
                           gettimeofday(&t1, NULL);
                           strcpy(buffer, "Escolha a disciplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886");
@@ -298,7 +298,7 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
                       sockets, TCP e UDP, e chamada de metodo remoto.\0");
     strcpy(disc[0].sala_de_aula, "CC03\0");
     strcpy(disc[0].horario, "Quinta 10:00 a 12:00\0");
-    strcpy(disc[0].comentario_ultima_aula, "mc833.txt\0");
+    strcpy(disc[0].comentario_ultima_aula, "comentarios/mc833.txt\0");
     strcpy(disc[0].usuario, "edmundo\0");
     strcpy(disc[0].senha, "edmundo123\0");
 
@@ -307,7 +307,7 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[1].ementa, "Conceitos basicos de organizacao de computadores. Construcao de algoritmos e sua representacao em pseudocodigo e linguagens de alto nivel. Desenvolvimento sistematico e implementacao de programas. Estruturacao, depuracao, testes e documentacao de programas. Resolucao de problemas.\0");
     strcpy(disc[1].sala_de_aula, "CC02\0");
     strcpy(disc[1].horario, "Sexta 14:00 a 16:00\0");
-    strcpy(disc[1].comentario_ultima_aula, "mc102.txt\0");
+    strcpy(disc[1].comentario_ultima_aula, "comentarios/mc102.txt\0");
     strcpy(disc[1].usuario, "zanoni\0");
     strcpy(disc[1].senha, "zanoni123\0");
 
@@ -316,8 +316,8 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[2].ementa, "Arquiteturas de sistemas de gerenciamento de bancos de dados. Modelagem de dados: modelos conceituais e logicos, incluindo o modelo relacional e normalizacao. algebra relacional. Linguagens de definicao e de manipulacao de dados. Otimizacao de consultas. Mecanismos de protecao, recuperacao e seguranca. Controle de concorrência. Bancos de dados nao relacionais. Projeto e desenvolvimento de ferramentas e tecnicas utilizadas na solucao de problemas de sistemas de informacao, utilizando bancos de dados. Modelagem, especificacao, projeto e implementacao de aplicacoes em sistemas de informacao.\0");
     strcpy(disc[2].sala_de_aula, "CB02\0");
     strcpy(disc[2].horario, "Segunda 10:00 a 12:00; Quarta 10:00 a 12:00\0 ");
-    strcpy(disc[2].comentario_ultima_aula, "mc536.txt\0");
-    strcpy(disc[2].usuario, " breno\0");
+    strcpy(disc[2].comentario_ultima_aula, "comentarios/mc536.txt\0");
+    strcpy(disc[2].usuario, "breno\0");
     strcpy(disc[2].senha, "breno123\0");
 
     strcpy(disc[3].id, "MC358\0");
@@ -325,7 +325,7 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[3].ementa, "Conceitos basicos de matematica strcpy(discreta e de logica para computacao.Tecnicas de provas, inducao matematica. Relacoes e conceitos de teoria de grafos. Modelagem de problemas usando grafos.\0");
     strcpy(disc[3].sala_de_aula, "CB02\0");
     strcpy(disc[3].horario, "Terca 19:00 a 21:00; Quarta 19:00 a 21:00\0");
-    strcpy(disc[3].comentario_ultima_aula, "mc358.txt\0");
+    strcpy(disc[3].comentario_ultima_aula, "comentarios/mc358.txt\0");
     strcpy(disc[3].usuario, "arnaldo\0");
     strcpy(disc[3].senha, "arnaldo123\0");
 
@@ -334,7 +334,7 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[4].ementa, "Visao comparativa de paradigmas de programacao: programacao funcional, programacao logica e programacao rapida (prototipacao).\0");
     strcpy(disc[4].sala_de_aula, "CB12\0");
     strcpy(disc[4].horario, "Segunda 16:00 a 18:00; Quarta 16:00 a 18:00\0");
-    strcpy(disc[4].comentario_ultima_aula, "mc346.txt\0");
+    strcpy(disc[4].comentario_ultima_aula, "comentarios/mc346.txt\0");
     strcpy(disc[4].usuario, "wainer\0");
     strcpy(disc[4].senha, "wainer123\0");
 
@@ -343,7 +343,7 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[5].ementa, "Introducao a Interfaces Humano-Computador (IHC). Aspectos humanos. Aspectos tecnologicos. Processos, metodos e tecnicas de pesquisa, design e avaliacao. Ferramentas de suporte. Concepcao, modelagem e prototipacao de solucoes em interfaces de usuario.\0");
     strcpy(disc[5].sala_de_aula, "CB06\0");
     strcpy(disc[5].horario, "Terca 16:00 a 18:00; Quinta 16:00 a 18:00\0");
-    strcpy(disc[5].comentario_ultima_aula, "mc750.txt\0");
+    strcpy(disc[5].comentario_ultima_aula, "comentarios/mc750.txt\0");
     strcpy(disc[5].usuario, "baranauskas\0");
     strcpy(disc[5].senha, "baranauskas123\0");
 
@@ -352,7 +352,7 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[6].ementa, "Tecnicas de projeto e analise de algoritmos. Ferramental Matematico para Analise de Algoritmos. Projeto de algoritmos por inducao. Busca, ordenacao e estatisticas de ordem. Programacao Dinâmica. Algoritmos Gulosos.\0");
     strcpy(disc[6].sala_de_aula, "PB18\0");
     strcpy(disc[6].horario, "Terca 10:00 a 12:00; Quinta 10:00 a 12:00\0");
-    strcpy(disc[6].comentario_ultima_aula, "mc458.txt\0");
+    strcpy(disc[6].comentario_ultima_aula, "comentarios/mc458.txt\0");
     strcpy(disc[6].usuario, "lehilton\0");
     strcpy(disc[6].senha, "lehilton123\0");
 
@@ -361,7 +361,7 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[7].ementa, "Grafos: conceitos e algoritmos. Reducoes entre problemas. Programacao Linear. Classes de Problemas.\0");
     strcpy(disc[7].sala_de_aula, "CB17\0");
     strcpy(disc[7].horario, "Terca 16:00 a 18:00; Quinta 16:00 a 18:00\0" );
-    strcpy(disc[7].comentario_ultima_aula, "mc558.txt\0");
+    strcpy(disc[7].comentario_ultima_aula, "comentarios/mc558.txt\0");
     strcpy(disc[7].usuario, "christiane\0");
     strcpy(disc[7].senha, "christiane123\0");
 
@@ -370,7 +370,7 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[8].ementa, "Tratamento de Problemas NP-dificeis: algoritmos exatos, algoritmos aproximados e algoritmos heuristicos.\0");
     strcpy(disc[8].sala_de_aula, "CB13\0");
     strcpy(disc[8].horario, "Segunda 19:00 a 21:00; Quarta 21:00 a 23:00\0");
-    strcpy(disc[8].comentario_ultima_aula, "mc658.txt\0");
+    strcpy(disc[8].comentario_ultima_aula, "comentarios/mc658.txt\0");
     strcpy(disc[8].usuario, "flavio\0");
     strcpy(disc[8].senha, "flavio123\0");
 
@@ -379,7 +379,7 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[9].ementa, "Tecnicas de aprendizado de maquina estatistico para classificacao, agrupamento e deteccao de outliers.\0");
     strcpy(disc[9].sala_de_aula, "CB01\0");
     strcpy(disc[9].horario, "Segunda 19:00 a 21:00; Quarta 21:00 a 23:00\0");
-    strcpy(disc[9].comentario_ultima_aula, "mc886.txt\0");
+    strcpy(disc[9].comentario_ultima_aula, "comentarios/mc886.txt\0");
     strcpy(disc[9].usuario, "rocha\0");
     strcpy(disc[9].senha, "rocha123\0");
 
@@ -494,7 +494,7 @@ int tryUserPassword(int new_fd, char id[], Disciplina disc[]) {
   int num;
 
 
-  tempos = fopen("WRITE_COMMENT.txt", "a");
+  tempos = fopen("WRITE_COMMENT.csv", "a");
   /*Caso nao consiga encontrar a disciplina*/
   if (i < 0) {
     printf("Erro, disciplina nao encontrada\n");
