@@ -29,13 +29,12 @@
 #define LINESIZE 1024
 
 typedef struct {
-  char id[6];             /*Formato : MCXXX\0 (?) (pode ser int XXX ja que todas
-                           * sao MC (?))*/
+  char id[6];             /*Formato : MCXXX\0*/
 
   char titulo[LINESIZE];  /*Formato : linha de texto*/
   char ementa[TEXTSIZE];  /*Formato : texto*/
   char sala_de_aula[5];   /*Formato : CC02\0 (?)*/
-  char horario[LINESIZE]; /*Formato : DIA_DA_SEMANA HH:mm a HH:mm;DIA_DA_SEMANA...\0 (?)*/
+  char horario[LINESIZE]; /*Formato : DIA_DA_SEMANA HH:mm a HH:mm;DIA_DA_SEMANA...\0*/
 
   char comentario_ultima_aula[TEXTSIZE]; /*Formato : texto*/
 
@@ -449,7 +448,7 @@ int tryUserPassword(int new_fd, char id[], Disciplina disc[]) {
   strcpy(buffer, "Insira o usuario (0 para sair)\0");
   /*COLOQUEI PARA MANDAR SÓ O TAMANHO DO BUFFER. AI PAROU DE DAR ERRO. MAS NAO
   SEI SE PARA DE DAR ERRO COM A AUTENTICACAO */
-  send(new_fd, buffer, strlen(buffer), 0);
+  send(new_fd, buffer, LINESIZE, 0);
 
 
   /*A espera do usuario valido ou do comando 0 de saida*/
