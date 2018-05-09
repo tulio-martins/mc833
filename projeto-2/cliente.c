@@ -3,7 +3,7 @@
 * Professor Edmundo
 * Túlio Martins     RA 177761
 * Nathália Harumi   RA 175188
-* Arquivo: cliente.c 
+* Arquivo: cliente.c
 *******************************************************************************/
 
 #include <stdio.h>
@@ -30,7 +30,7 @@
 
 #define ERROR_MESSAGE "Erro, disciplina nao encontrada\0"
 
-#define GREETING_MESSAGE " \n\nConectado ao sistema de disciplinas\n\
+#define GREETING_MESSAGE " \n\
 As disciplinas disponiveis sao: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886\n\
 As opcoes disponiveis sao:\n\
   1 - lista todos os codigos de disciplinas com seus respectivos titulos\n\
@@ -89,7 +89,7 @@ int main(int argc, char* argv[]) {
 
     /*Estabelece conexao - se nao conseguir declara erro de socket
     * e termina*/
-    if ((socket_fd = socket(AF_INET, SOCK_STREAM, 0))== -1) {
+    if ((socket_fd = socket(AF_INET, SOCK_DGRAM, 0))== -1) {
         fprintf(stderr, "Socket Failure!!\n");
         exit(1);
     }
