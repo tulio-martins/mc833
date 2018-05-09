@@ -231,7 +231,7 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
     strcpy(disc[0].id, "MC833\0");
     strcpy(disc[0].titulo, "Programacao de Redes de Computadores\0");
     strcpy(disc[0].ementa, "Programacao utilizando diferentes tecnologias de comunicacao:\
-                      sockets, TCP e UDP, e chamada de metodo remoto.\0");
+                    sockets, TCP e UDP, e chamada de metodo remoto.\0");
     strcpy(disc[0].sala_de_aula, "CC03\0");
     strcpy(disc[0].horario, "Quinta 10:00 a 12:00\0");
     strcpy(disc[0].comentario_ultima_aula, "mc833.txt\0");
