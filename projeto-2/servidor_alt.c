@@ -83,7 +83,7 @@ int main() {
     int socket_fd, num;
     unsigned int clientlen;
 
-    char buffer[LINESIZE];
+    char server_out[TEXTSIZE];
     char client_disc_id[6];
     int yes =1;
 
@@ -123,7 +123,7 @@ int main() {
 
     do {
 
-                 /*recebe a mensagem do cliente*/
+        /*recebe a mensagem do cliente*/
         if ((num = recvfrom(socket_fd, client_in, TEXTSIZE, 0, (struct sockaddr *) &client_info, &clientlen))== -1 || num == 0) {
             option = CONNECTION_CLOSED;
         } else {
@@ -187,13 +187,17 @@ int main() {
 
              case CONNECTION_CLOSED:
                 printf("Erro na conexao - Cliente perdido\n");
+                strcpy(server_out, "Desconectando cliente devido a erro\n");
+                sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
                 break;
              case EXIT:
                 printf("Conexao terminada\n");
+                strcpy(server_out, "Desconectando cliente - Ate logo!\n");
+                sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
                 break;
          }
 
-     } while ( option != EXIT && option != CONNECTION_CLOSED);
+    } while (1);
 
     close(socket_fd);
     return 0;
@@ -300,7 +304,7 @@ void listDisciplines(int socket_fd, Disciplina disc[], unsigned int clientlen, s
     char partial_out[TEXTSIZE];
     char server_out[TEXTSIZE];
 
-    strcpy(server_out, " ");
+    strcpy(server_out, "");
 
     printf("Enviando lista de disciplinas\n");
     for(int i = 0; i < 10; i++) {
