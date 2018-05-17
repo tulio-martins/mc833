@@ -146,7 +146,7 @@ int main(int argc, char* argv[]) {
       option = comment[0];
 
       tv.tv_sec = 0;
-      tv.tv_usec = 1000;
+      tv.tv_usec = 10000;
 
       rv = select(socket_fd+1, &readfds, NULL, NULL, &tv);
 
