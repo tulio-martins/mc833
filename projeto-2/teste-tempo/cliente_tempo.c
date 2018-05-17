@@ -21,6 +21,7 @@
 #include <sys/select.h>
 #include <sys/unistd.h>
 #include <sys/fcntl.h>
+#include <sys/time.h>
 
 #define LIST_DISCIPLINES   '1'
 #define DISCIPLINE_TABLE   '2' /*ementa da disciplina*/
@@ -65,6 +66,11 @@ int recvDisciplineTable(int socket_fd, char disc_id[6]);
 int recvDisciplineInfo(int socket_fd);
 /*Recebe o comentario da ultima aula da disciplina 'id'*/
 int recvNextClassComment(int socket_fd, char disc_id[6]);
+
+/*contador do tempo de cada operacao*/
+struct timeval t1, t2;
+double elapsedTime = 0;
+FILE *tempos;
 
 int main(int argc, char* argv[]) {
 
@@ -146,9 +152,27 @@ int main(int argc, char* argv[]) {
 
       if (rv == 0) {
         printf("Erro na recepcao de mensagem - Timeout atingido! - Tente novamente\n");
+        tempos = fopen("CLIENT_TIME.csv", "a");
+        gettimeofday(&t2, NULL);
+        elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000000.0;      // sec to ms
+        elapsedTime += (t2.tv_usec - t1.tv_usec);
+        fprintf(tempos, "%lf,", elapsedTime);
+        fclose(tempos);
+        tempos = fopen("TIMEOUT.csv", "a");
+        fprintf(tempos, "Y,");
+        fclose(tempos);
       } else  {
         if (FD_ISSET(socket_fd, &readfds)) {
           recv(socket_fd, server_in, TEXTSIZE,0);
+          tempos = fopen("CLIENT_TIME.csv", "a");
+          gettimeofday(&t2, NULL);
+          elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000000.0;      // sec to ms
+          elapsedTime += (t2.tv_usec - t1.tv_usec);
+          fprintf(tempos, "%lf,", elapsedTime);
+          fclose(tempos);
+          tempos = fopen("TIMEOUT.csv", "a");
+          fprintf(tempos, "N,");
+          fclose(tempos);
           printf("%s\n", server_in);
         }
       }

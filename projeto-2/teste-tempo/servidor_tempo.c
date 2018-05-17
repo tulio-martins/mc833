@@ -18,6 +18,7 @@
 #include <arpa/inet.h>
 #include <pthread.h>
 #include <sys/time.h>
+#include <sys/time.h>
 
 #define LIST_DISCIPLINES  '1'
 #define DISCIPLINE_MENU   '2' /*ementa da disciplina*/
@@ -71,7 +72,10 @@ int findDiscipline(char id[], Disciplina disc[]);
 /*Conferfe autenticacao do professor para escrever comentario*/
 void tryUserPassword(char client_in[], int socket_fd, Disciplina disc[], unsigned int clientlen, struct sockaddr_in client_info);
 
-
+/*contador do tempo de cada operacao*/
+struct timeval t1, t2;
+double elapsedTime = 0;
+FILE *tempos;
 
 int main() {
 
@@ -87,10 +91,7 @@ int main() {
     char client_disc_id[6];
     int yes =1;
 
-
     Disciplina disc[10];
-
-    strcpy(disc[0].id, "MC833\0");
 
     inicializandoDisciplinas(disc);
 
@@ -127,6 +128,7 @@ int main() {
         if ((num = recvfrom(socket_fd, client_in, TEXTSIZE, 0, (struct sockaddr *) &client_info, &clientlen))== -1 || num == 0) {
             option = CONNECTION_CLOSED;
         } else {
+            gettimeofday(&t1, NULL);
             option = client_in[0];
         }
 
@@ -318,6 +320,14 @@ void listDisciplines(int socket_fd, Disciplina disc[], unsigned int clientlen, s
       strcat(server_out, partial_out);
     }
     strcat(server_out, "\n\0");
+    /******************************************/
+    tempos = fopen("LIST_DISCIPLINES.csv", "a");
+    gettimeofday(&t2, NULL);
+    elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000000.0;      // sec to ms
+    elapsedTime += (t2.tv_usec - t1.tv_usec);
+    fprintf(tempos, "%lf,", elapsedTime);
+    fclose(tempos);
+    /******************************************/
     sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
     printf("Enviadas todas as disciplinas\n");
 }
@@ -334,6 +344,14 @@ void showDisciplineMenu(char id[], int socket_fd, Disciplina disc[], unsigned in
     sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
   } else {
     sprintf(server_out, "Disciplina %s.\n Ementa: %s\n", disc[i].id, disc[i].ementa);
+    /******************************************/
+    tempos = fopen("DISCIPLINE_MENU.csv", "a");
+    gettimeofday(&t2, NULL);
+    elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000000.0;      // sec to ms
+    elapsedTime += (t2.tv_usec - t1.tv_usec);
+    fprintf(tempos, "%lf,", elapsedTime);
+    fclose(tempos);
+    /******************************************/
     sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
   }
 
@@ -364,7 +382,14 @@ void showDisciplineInfo (char id[], int socket_fd, Disciplina disc[], unsigned i
     sprintf(server_out, "Disciplina: %s\n Titulo: %s\n Ementa: %s\n Sala: %s\n Horario: %s\n\
     Comentario da ultima aula: %s\n\n", disc[i].id, disc[i].titulo, disc[i].ementa, disc[i].sala_de_aula,
     disc[i].horario, comentario_texto);
-
+    /******************************************/
+    tempos = fopen("DISCIPLINE_INFO.csv", "a");
+    gettimeofday(&t2, NULL);
+    elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000000.0;      // sec to ms
+    elapsedTime += (t2.tv_usec - t1.tv_usec);
+    fprintf(tempos, "%lf,", elapsedTime);
+    fclose(tempos);
+    /******************************************/
     sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
   }
   printf("Enviadas todas as informacoes de disciplina %s\n", id);
@@ -398,6 +423,14 @@ void showAllDisciplineInfo(int socket_fd, Disciplina disc[], unsigned int client
   }
 
   strcat(server_out, "\n\0");
+  /******************************************/
+  tempos = fopen("ALL_DISCIPL_INFO.csv", "a");
+  gettimeofday(&t2, NULL);
+  elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000000.0;      // sec to ms
+  elapsedTime += (t2.tv_usec - t1.tv_usec);
+  fprintf(tempos, "%lf,", elapsedTime);
+  fclose(tempos);
+  /******************************************/
   sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
   printf("Enviadas todas as disciplinas\n");
 
@@ -425,6 +458,14 @@ void getComment(int socket_fd, char id[], Disciplina disc[], unsigned int client
       }
 
       sprintf(server_out, "Comentario da disciplina %s : %s", disc[i].id, comentario_texto);
+      /******************************************/
+      tempos = fopen("GET_COMMENT.csv", "a");
+      gettimeofday(&t2, NULL);
+      elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000000.0;      // sec to ms
+      elapsedTime += (t2.tv_usec - t1.tv_usec);
+      fprintf(tempos, "%lf,", elapsedTime);
+      fclose(tempos);
+      /******************************************/
       sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
   }
   printf("Enviado comentario da ultima aula da disciplina %s\n", id);
@@ -472,6 +513,14 @@ void tryUserPassword(char client_in[], int socket_fd, Disciplina disc[], unsigne
       fclose(comentario);
       printf("Comentario escrito com sucesso: %s\n", comment);
       strcpy(server_out, "Comentario escrito com sucesso\n");
+      /******************************************/
+      tempos = fopen("WRITE_COMMENT.csv", "a");
+      gettimeofday(&t2, NULL);
+      elapsedTime = (t2.tv_sec - t1.tv_sec) * 1000000.0;      // sec to ms
+      elapsedTime += (t2.tv_usec - t1.tv_usec);
+      fprintf(tempos, "%lf,", elapsedTime);
+      fclose(tempos);
+      /******************************************/
       sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
 
     } else {
