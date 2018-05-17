@@ -134,7 +134,8 @@ int main(int argc, char* argv[]) {
       /*Capturando comando todo como linha*/
       scanf(" "); //ignorando espacos para o fgets
       fgets(comment, TEXTSIZE, stdin); //scanf nao funciona pois eh um texto
-
+	
+      gettimeofday(&t1, NULL);
       if ((send(socket_fd, comment, TEXTSIZE,0))== -1) {
         printf("Erro ao mandar mensagem - terminando conexao\n");
         close(socket_fd);
