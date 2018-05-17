@@ -195,6 +195,11 @@ int main() {
                 strcpy(server_out, "Desconectando cliente - Ate logo!\n");
                 sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
                 break;
+             default:
+                printf("Comando invalido - Tente novamente\n");
+                strcpy(server_out, "Comando invalido - Tente novamente");
+                sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
+                break;
          }
 
     } while (1);
@@ -325,7 +330,8 @@ void showDisciplineMenu(char id[], int socket_fd, Disciplina disc[], unsigned in
   printf("Enviando ementa de disciplina %s\n", id);
   if (i < 0) {
     printf("Erro, disciplina nao encontrada\n");
-    sendto(socket_fd, ERROR_MESSAGE, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
+    strcpy(server_out, ERROR_MESSAGE);
+    sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
   } else {
     sprintf(server_out, "Disciplina %s.\n Ementa: %s\n", disc[i].id, disc[i].ementa);
     sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
@@ -345,7 +351,8 @@ void showDisciplineInfo (char id[], int socket_fd, Disciplina disc[], unsigned i
   printf("Enviando todas as informacoes de disciplina %s\n", id);
   if (i < 0) {
     printf("Erro, disciplina nao encontrada\n");
-    sendto(socket_fd, ERROR_MESSAGE, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
+    strcpy(server_out, ERROR_MESSAGE);
+    sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
   } else {
     comentario = fopen(disc[i].comentario_ultima_aula, "r");
     if (comentario){
@@ -406,7 +413,8 @@ void getComment(int socket_fd, char id[], Disciplina disc[], unsigned int client
   printf("Enviando comentario da ultima aula da disciplina %s\n", id);
   if (i < 0) {
     printf("Erro, disciplina nao encontrada\n");
-    sendto(socket_fd, ERROR_MESSAGE, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
+    strcpy(server_out, ERROR_MESSAGE);
+    sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
   } else {
       comentario = fopen(disc[i].comentario_ultima_aula, "r");
       if (comentario){
