@@ -1,5 +1,5 @@
 /*******************************************************************************
-* Trabalho 2 - Servidor UDP
+* Trabalho 1 - Servidor TCP
 * Professor Edmundo
 * Túlio Martins     RA 177761
 * Nathália Harumi   RA 175188
@@ -60,8 +60,6 @@ void inicializandoDisciplinas(Disciplina disc[10]);
 void listDisciplines(int socket_fd, Disciplina disc[], unsigned int clientlen, struct sockaddr_in client_info);
 /*Dado o codigo de uma disciplina, retornar a ementa*/
 void showDisciplineMenu(char id[], int socket_fd, Disciplina disc[], unsigned int clientlen, struct sockaddr_in client_info);
-/*Mostra todas as informacoes de todasd as disciplinas*/
-void showAllDisciplineInfo(int socket_fd, Disciplina disc[], unsigned int clientlen, struct sockaddr_in client_info);
 /*Dado o codigo de uma disciplina, retornar todas as informacoes da mesma*/
 void showDisciplineInfo (char id[], int socket_fd, Disciplina disc[], unsigned int clientlen, struct sockaddr_in client_info);
 /*Retornar comentario da ultima aula da mesma disciplina*/
@@ -69,21 +67,20 @@ void getComment(int socket_fd, char id[], Disciplina disc[], unsigned int client
 /*Retorna o indice da disciplina com o id 'id' - retorna '-1' se nao encontrar*/
 int findDiscipline(char id[], Disciplina disc[]);
 /*Conferfe autenticacao do professor para escrever comentario*/
-void tryUserPassword(char client_in[], int socket_fd, Disciplina disc[], unsigned int clientlen, struct sockaddr_in client_info);
+int tryUserPassword(int socket_fd, char id[], Disciplina disc[], unsigned int clientlen, struct sockaddr_in client_info);
 
 
 
 int main() {
 
     char option;
-    char client_in[TEXTSIZE];
 
     struct sockaddr_in server, client_info;
     struct sockaddr_in dest;
     int socket_fd, num;
     unsigned int clientlen;
 
-    char server_out[TEXTSIZE];
+    char buffer[LINESIZE];
     char client_disc_id[6];
     int yes =1;
 
@@ -121,88 +118,108 @@ int main() {
         exit(1);
     }
 
-    do {
+               do {
 
-        /*recebe a mensagem do cliente*/
-        if ((num = recvfrom(socket_fd, client_in, TEXTSIZE, 0, (struct sockaddr *) &client_info, &clientlen))== -1 || num == 0) {
-            option = CONNECTION_CLOSED;
-        } else {
-            option = client_in[0];
-        }
+                 /*recebe a mensagem do cliente*/
+                 if ((num = recvfrom(socket_fd, &option, 1, 0, (struct sockaddr *) &client_info, &clientlen))== -1 || num == 0) {
+                    option = CONNECTION_CLOSED;
+                 }
+                   /*Executa a opcao escolhida pelo cliente*/
+                   switch (option) {
+                       case LIST_DISCIPLINES:
 
-        /*Executa a opcao escolhida pelo cliente*/
-        switch (option) {
-             case LIST_DISCIPLINES:
+                          listDisciplines(socket_fd, disc, clientlen, client_info);
+                          break;
 
-                listDisciplines(socket_fd, disc, clientlen, client_info);
-                break;
+                       case DISCIPLINE_MENU:
 
-             case DISCIPLINE_MENU:
+                          strcpy(buffer, "Escolha a disciplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886");
+                          sendto(socket_fd, buffer, LINESIZE, 0, (struct sockaddr *) &client_info, clientlen);
 
-                client_disc_id[0] = client_in[2];
-                client_disc_id[1] = client_in[3];
-                client_disc_id[2] = client_in[4];
-                client_disc_id[3] = client_in[5];
-                client_disc_id[4] = client_in[6];
-                client_disc_id[5] = '\0';
-                showDisciplineMenu(client_disc_id, socket_fd, disc, clientlen, client_info);
+                          /*recebe a mensagem do cliente*/
+                          if ((num = recvfrom(socket_fd, client_disc_id, 6, 0, (struct sockaddr *) &client_info, &clientlen))== -1 || num == 0) {
+                             /*Caso de erro, pode houver perda de conexao com o
+                              * cliente, portanto conexao deve ser terminada*/
+                             printf("Erro na recepcao de mensagem  terminando conexao\n");
+                             option = CONNECTION_CLOSED;
+                          } else {
+                            client_disc_id[6] = '\0';
+                            showDisciplineMenu(client_disc_id, socket_fd, disc, clientlen, client_info);
+                          }
 
-                break;
+                          break;
 
-             case DISCIPLINE_INFO:
+                       case DISCIPLINE_INFO:
 
-                client_disc_id[0] = client_in[2];
-                client_disc_id[1] = client_in[3];
-                client_disc_id[2] = client_in[4];
-                client_disc_id[3] = client_in[5];
-                client_disc_id[4] = client_in[6];
-                client_disc_id[5] = '\0';
-                showDisciplineInfo(client_disc_id, socket_fd, disc, clientlen, client_info);
+                          strcpy(buffer, "Escolha a disciplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886");
+                          sendto(socket_fd, buffer, LINESIZE, 0, (struct sockaddr *) &client_info, clientlen);
 
-                break;
+                          if ((num = recvfrom(socket_fd, client_disc_id, 6, 0, (struct sockaddr *) &client_info, &clientlen))== -1 || num == 0) {
+                             /*Caso de erro, pode houver perda de conexao com o
+                              * cliente, portanto conexao deve ser terminada*/
+                             printf("Erro na recepcao de mensagem  terminando conexao\n");
+                             option = CONNECTION_CLOSED;
+                          } else {
+                            client_disc_id[6] = '\0';
+                            showDisciplineInfo(client_disc_id, socket_fd, disc, clientlen, client_info);
+                          }
 
-             case ALL_DISCIPL_INFO:
+                          break;
 
-                showAllDisciplineInfo(socket_fd, disc, clientlen, client_info);
+                       case ALL_DISCIPL_INFO:
 
-                break;
+                          for(int i = 0; i < 10; i++) {
+                              showDisciplineInfo(disc[i].id, socket_fd, disc, clientlen, client_info);
+                          }
 
-             case WRITE_COMMENT:
+                          break;
 
-                tryUserPassword(client_in, socket_fd, disc, clientlen, client_info);
+                       case WRITE_COMMENT:
 
-                break;
+                          strcpy(buffer, "Escolha a disciplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886\0");
+                          sendto(socket_fd, buffer, LINESIZE, 0, (struct sockaddr *) &client_info, clientlen);
 
-             case NEXT_CLASS_COMM:
+                          if ((num = recvfrom(socket_fd, client_disc_id, 6, 0, (struct sockaddr *) &client_info, &clientlen))== -1 || num == 0) {
+                             /*Caso de erro, pode houver perda de conexao com o
+                              * cliente, portanto conexao deve ser terminada*/
+                             printf("Erro na recepcao de mensagem  terminando conexao\n");
+                             option = CONNECTION_CLOSED;
+                          } else {
 
-                client_disc_id[0] = client_in[2];
-                client_disc_id[1] = client_in[3];
-                client_disc_id[2] = client_in[4];
-                client_disc_id[3] = client_in[5];
-                client_disc_id[4] = client_in[6];
-                client_disc_id[5] = '\0';
-                getComment(socket_fd, client_disc_id, disc, clientlen, client_info);
+                            if(tryUserPassword(socket_fd, client_disc_id, disc, clientlen, client_info) < 0) {
+                              option = CONNECTION_CLOSED;
+                              printf("Saindo\n");
+                            }
+                            printf("Sai com sucesso\n");
+                          }
 
-                break;
+                          break;
 
-             case CONNECTION_CLOSED:
-                printf("Erro na conexao - Cliente perdido\n");
-                strcpy(server_out, "Desconectando cliente devido a erro\n");
-                sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
-                break;
-             case EXIT:
-                printf("Conexao terminada\n");
-                strcpy(server_out, "Desconectando cliente - Ate logo!\n");
-                sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
-                break;
-             default:
-                printf("Comando invalido - Tente novamente\n");
-                strcpy(server_out, "Comando invalido - Tente novamente");
-                sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
-                break;
-         }
+                       case NEXT_CLASS_COMM:
 
-    } while (1);
+                          strcpy(buffer, "Escolha a disciplina: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886");
+                          sendto(socket_fd, buffer, LINESIZE, 0, (struct sockaddr *) &client_info, clientlen);
+
+                          if ((num = recvfrom(socket_fd, client_disc_id, 6, 0, (struct sockaddr *) &client_info, &clientlen))== -1 || num == 0) {
+                             /*Caso de erro, pode houver perda de conexao com o
+                              * cliente, portanto conexao deve ser terminada*/
+                             printf("Erro na recepcao de mensagem  terminando conexao aloooo\n");
+                             option = CONNECTION_CLOSED;
+                          } else {
+                            getComment(socket_fd, client_disc_id, disc, clientlen, client_info);
+                          }
+
+                          break;
+
+                       case CONNECTION_CLOSED:
+                          printf("Erro na conexao - Cliente perdido\n");
+                          break;
+                       case EXIT:
+                          printf("Conexao terminada\n");
+                          break;
+                   }
+
+               } while ( option != EXIT && option != CONNECTION_CLOSED);
 
     close(socket_fd);
     return 0;
@@ -306,35 +323,27 @@ void inicializandoDisciplinas(Disciplina disc[10]) {
 
 /*Listar codigos das disciplinas com respectivos titulos*/
 void listDisciplines(int socket_fd, Disciplina disc[], unsigned int clientlen, struct sockaddr_in client_info) {
-    char partial_out[TEXTSIZE];
-    char server_out[TEXTSIZE];
-
-    strcpy(server_out, "");
 
     printf("Enviando lista de disciplinas\n");
     for(int i = 0; i < 10; i++) {
 
-      sprintf(partial_out, "Discplina %s : %s\n", disc[i].id, disc[i].titulo);
-      strcat(server_out, partial_out);
+      sendto(socket_fd, disc[i].id, 6, 0, (struct sockaddr *) &client_info, clientlen);
+      sendto(socket_fd, disc[i].titulo, LINESIZE, 0, (struct sockaddr *) &client_info, clientlen);
+
     }
-    strcat(server_out, "\n\0");
-    sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
     printf("Enviadas todas as disciplinas\n");
 }
 
 /*Dado o codigo de uma disciplina, retornar a ementa*/
 void showDisciplineMenu(char id[], int socket_fd, Disciplina disc[], unsigned int clientlen, struct sockaddr_in client_info) {
   int i = findDiscipline(id, disc);
-  char server_out[TEXTSIZE];
 
   printf("Enviando ementa de disciplina %s\n", id);
   if (i < 0) {
     printf("Erro, disciplina nao encontrada\n");
-    strcpy(server_out, ERROR_MESSAGE);
-    sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
+    sendto(socket_fd, ERROR_MESSAGE, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
   } else {
-    sprintf(server_out, "Disciplina %s.\n Ementa: %s\n", disc[i].id, disc[i].ementa);
-    sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
+    sendto(socket_fd, disc[i].ementa, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
   }
 
   printf("Enviada ementa da disciplina %s\n", id);
@@ -346,14 +355,17 @@ void showDisciplineInfo (char id[], int socket_fd, Disciplina disc[], unsigned i
   int i = findDiscipline(id, disc);
   FILE* comentario;
   char comentario_texto[TEXTSIZE];
-  char server_out[TEXTSIZE];
 
   printf("Enviando todas as informacoes de disciplina %s\n", id);
   if (i < 0) {
     printf("Erro, disciplina nao encontrada\n");
-    strcpy(server_out, ERROR_MESSAGE);
-    sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
+    sendto(socket_fd, ERROR_MESSAGE, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
   } else {
+    sendto(socket_fd, disc[i].id, 6, 0, (struct sockaddr *) &client_info, clientlen);
+    sendto(socket_fd, disc[i].titulo, LINESIZE, 0, (struct sockaddr *) &client_info, clientlen);
+    sendto(socket_fd, disc[i].ementa, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
+    sendto(socket_fd, disc[i].sala_de_aula, 5, 0, (struct sockaddr *) &client_info, clientlen);
+    sendto(socket_fd, disc[i].horario, LINESIZE, 0, (struct sockaddr *) &client_info, clientlen);
     comentario = fopen(disc[i].comentario_ultima_aula, "r");
     if (comentario){
         fgets(comentario_texto, TEXTSIZE, comentario);
@@ -361,46 +373,9 @@ void showDisciplineInfo (char id[], int socket_fd, Disciplina disc[], unsigned i
     } else {
         strcpy(comentario_texto, "N/A\0");
     }
-    sprintf(server_out, "Disciplina: %s\n Titulo: %s\n Ementa: %s\n Sala: %s\n Horario: %s\n\
-    Comentario da ultima aula: %s\n\n", disc[i].id, disc[i].titulo, disc[i].ementa, disc[i].sala_de_aula,
-    disc[i].horario, comentario_texto);
-
-    sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
+    sendto(socket_fd, comentario_texto, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
   }
   printf("Enviadas todas as informacoes de disciplina %s\n", id);
-}
-
-
-void showAllDisciplineInfo(int socket_fd, Disciplina disc[], unsigned int clientlen, struct sockaddr_in client_info) {
-  char partial_out[TEXTSIZE];
-  char server_out[TEXTSIZE];
-  FILE* comentario;
-  char comentario_texto[TEXTSIZE];
-
-
-  strcpy(server_out, " ");
-
-  printf("Enviando lista de disciplinas\n");
-  for(int i = 0; i < 10; i++) {
-
-    comentario = fopen(disc[i].comentario_ultima_aula, "r");
-    if (comentario){
-        fgets(comentario_texto, TEXTSIZE, comentario);
-        fclose(comentario);
-    } else {
-        strcpy(comentario_texto, "N/A\0");
-    }
-
-    sprintf(partial_out, "Disciplina: %s\n Titulo: %s\n Ementa: %s\n Sala: %s\n Horario: %s\n\
-            Comentario da ultima aula: %s\n\n", disc[i].id, disc[i].titulo, disc[i].ementa, disc[i].sala_de_aula,
-            disc[i].horario, comentario_texto);
-    strcat(server_out, partial_out);
-  }
-
-  strcat(server_out, "\n\0");
-  sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
-  printf("Enviadas todas as disciplinas\n");
-
 }
 
 /*Retornar comentario da ultima aula da mesma disciplina*/
@@ -408,13 +383,11 @@ void getComment(int socket_fd, char id[], Disciplina disc[], unsigned int client
   int i = findDiscipline(id, disc);
   FILE* comentario;
   char comentario_texto[TEXTSIZE];
-  char server_out[TEXTSIZE];
 
   printf("Enviando comentario da ultima aula da disciplina %s\n", id);
   if (i < 0) {
     printf("Erro, disciplina nao encontrada\n");
-    strcpy(server_out, ERROR_MESSAGE);
-    sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
+    sendto(socket_fd, ERROR_MESSAGE, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
   } else {
       comentario = fopen(disc[i].comentario_ultima_aula, "r");
       if (comentario){
@@ -423,9 +396,7 @@ void getComment(int socket_fd, char id[], Disciplina disc[], unsigned int client
       } else {
           strcpy(comentario_texto, "N/A\0");
       }
-
-      sprintf(server_out, "Comentario da disciplina %s : %s", disc[i].id, comentario_texto);
-      sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
+      sendto(socket_fd, comentario_texto, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
   }
   printf("Enviado comentario da ultima aula da disciplina %s\n", id);
 }
@@ -443,48 +414,106 @@ int findDiscipline(char id[], Disciplina disc[]) {
 }
 
 /*trata o reconhecimento do usuario e senha do professor e escrita do comentario*/
-void tryUserPassword(char client_in[], int socket_fd, Disciplina disc[], unsigned int clientlen, struct sockaddr_in client_info) {
+int tryUserPassword(int socket_fd, char id[], Disciplina disc[], unsigned int clientlen, struct sockaddr_in client_info) {
   char buffer[LINESIZE];
+  char client_in[LINESIZE];
   char comment[TEXTSIZE];
-  char server_out[TEXTSIZE];
-  char id[6];
   FILE* comentario;
 
-  char  trash, user[LINESIZE], password[LINESIZE];
-
-  int i;
+  int i = findDiscipline(id, disc);
   int num;
-
-  sscanf(client_in, "%c %s %s %s %[^\n]s", &trash, id, user, password, comment);
-
-  i = findDiscipline(id, disc);
 
   /*Caso nao consiga encontrar a disciplina*/
   if (i < 0) {
     printf("Erro, disciplina nao encontrada\n");
     sendto(socket_fd, ERROR_MESSAGE, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
-    return;
-  } else {
-
-    if ( strcmp(user, disc[i].usuario) == 0 && strcmp(password, disc[i].senha) == 0 ) {
-      comentario = fopen (disc[i].comentario_ultima_aula, "w");
-      fprintf(comentario, "%s\n", comment);
-      fclose(comentario);
-      printf("Comentario escrito com sucesso: %s\n", comment);
-      strcpy(server_out, "Comentario escrito com sucesso\n");
-      sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
-
-    } else {
-      printf("Erro de autenticao de usuario e senha\n");
-      strcpy(server_out, "Erro de autenticao de usuario e senha\n");
-      sendto(socket_fd, server_out, TEXTSIZE, 0, (struct sockaddr *) &client_info, clientlen);
-    }
-
+    return 0;
   }
 
+  /*Requisita usuario*/
+  strcpy(buffer, "Insira o usuario (0 para sair)\0");
 
-}
+  sendto(socket_fd, buffer, LINESIZE, 0, (struct sockaddr *) &client_info, clientlen);
 
-void GetUserPasswordCommment(char text[], char user[], char password[], char comment[]) {
+
+  /*A espera do usuario valido ou do comando 0 de saida*/
+  do {
+    if ((num = recvfrom(socket_fd, client_in, LINESIZE, 0, (struct sockaddr *) &client_info, &clientlen))== -1 || num == 0) {
+
+       /*Caso de erro, pode houver perda de conexao com o
+        * cliente, portanto conexao deve ser terminada*/
+       printf("Erro na recepcao de mensagem  terminando conexao\n");
+       return -1;
+    } else {
+        printf("cliente: %s\n", client_in);
+
+       /*Usuario correto*/
+       if (strcmp(client_in, disc[i].usuario) == 0) {
+
+         /*Requisita senha correta*/
+         strcpy(buffer, "Insira a senha (0 para sair)\0");
+         sendto(socket_fd, buffer, LINESIZE,0, (struct sockaddr *) &client_info, clientlen);
+
+         /*A espera da senha correta ou do comando de saida 0*/
+         do {
+           if ((num = recvfrom(socket_fd, client_in, LINESIZE, 0, (struct sockaddr *) &client_info, &clientlen))== -1 || num == 0) {
+            /*Caso de erro, pode houver perda de conexao com o
+            * cliente, portanto conexao deve ser terminada*/
+            printf("Erro na recepcao de mensagem  terminando conexao\n");
+            return -1;
+
+
+           } else if (strcmp(client_in, disc[i].senha) == 0){
+
+
+             /*Senha correta a espera do texto*/
+             strcpy(buffer, "Escreva o texto\0");
+             sendto(socket_fd,buffer, LINESIZE,0, (struct sockaddr *) &client_info, clientlen);
+
+             if ((num = recvfrom(socket_fd, comment, TEXTSIZE, 0, (struct sockaddr *) &client_info, &clientlen))== -1 || num == 0) {
+               /*Caso de erro, pode houver perda de conexao com o
+               * cliente, portanto conexao deve ser terminada*/
+               printf("Erro na recepcao de mensagem  terminando conexao\n");
+               return -1;
+             } else {
+               /*Guarda texto*/
+               comentario = fopen (disc[i].comentario_ultima_aula, "w");
+               fprintf(comentario, "%s\n", comment);
+               fclose(comentario);
+               printf("Comentario escrito com sucesso: %s\n", comment);
+               return 1;
+             }
+
+
+           } else if (strcmp(client_in, "0") == 0) {
+
+
+            /*Comando de saida inserido no campo de senha*/
+            strcpy(buffer, "Saindo\0");
+            sendto(socket_fd,buffer, LINESIZE,0, (struct sockaddr *) &client_info, clientlen);
+            return 0;
+           } else {
+
+            /*senha incorreta*/
+            strcpy(buffer, "Tente novamente a senha\0");
+            sendto(socket_fd,buffer, LINESIZE,0, (struct sockaddr *) &client_info, clientlen);
+           }
+         } while (1);
+
+       } else if (strcmp(client_in, "0\0") == 0) {
+
+         /*Comando de saida inserido no campo de usuario*/
+         strcpy(buffer, "Saindo\0");
+         sendto(socket_fd,buffer, LINESIZE,0, (struct sockaddr *) &client_info, clientlen);
+         return 0;
+       } else {
+
+         /*usuario incorreto*/
+         strcpy(buffer, "Tente novamente o usuario\0");
+         sendto(socket_fd,buffer, LINESIZE,0, (struct sockaddr *) &client_info, clientlen);
+       }
+    }
+
+  } while (1);
 
 }
