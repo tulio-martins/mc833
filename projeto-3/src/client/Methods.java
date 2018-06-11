@@ -1,61 +1,29 @@
 package client;
 
 import java.io.Serializable;
-import server.Task;
+import compute.Task;
 
 public class Methods implements Task<String>, Serializable {
 
 	private char option;
+	private String disc_id;
+	private String user_name;
+	private String psswd;
 	
+	private static String ERROR_MESSAGE = "A mensagem enviada possui um comando invalido";
 	
+	public Methods(char option, String disc_id, String user_name, String psswd) {
+		this.option = option;
+		this.disc_id = disc_id;
+		this.user_name = user_name;
+		this.psswd = psswd;
+	}
+
 	public String execute() {
-		
-		switch(option) {
-			case '1':
-				return listAllDisciplines();
-				break;
-			case '2':
-				return disciplineMenu(disc_id);
-				break;
-			case '3':
-				return listAllDisciplines();
-				break;
-			case '4':
-				return listAllDisciplines();
-				break;
-			case '5':
-				return listAllDisciplines();
-				break;
-			case '6':
-				return listAllDisciplines();
-				break;
-			case '7':
-				return listAllDisciplines();
-				break;
-		}
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
-	public static String listAllDisciplines() {
-		
-	}
 	
-	public static String disciplineMenu(String disc_id) {
-		
-	}
 	
-	public static String discplineInfo(String disc_id) {
-		
-	}
-	
-	public static String listAllDiscplinesInfo() {
-		
-	}
-	
-	public static String writeComment(String disc_id, String user_name, String user_psswd) {
-		
-	}
-	
-	public static String getComment(String disc_id) {
-		
-	}
 }

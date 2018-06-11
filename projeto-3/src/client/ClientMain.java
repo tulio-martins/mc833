@@ -3,6 +3,8 @@ package client;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Scanner;
+import compute.RMI_Interface;
+
 
 public class ClientMain {
 
@@ -21,34 +23,72 @@ public class ClientMain {
 			"  comando 5 -  e somente entao pressione \'enter\':\n\n" + 
 			"  exemplo: \n \"1\"\n \"2 MC102\"\n \"5 MC102 usuario senha comentario\"\n ";
 	
+	private static String ERROR_MESSAGE = "A mensagem enviada possui um comando invalido";
+	
 	public static void main(String args[]) {
-		//if (System.getSecurityManager() == null) {
-        //    System.setSecurityManager(new SecurityManager());
-        //}
-        //try {
-        //    String name = "Compute";
-        //    Registry registry = LocateRegistry.getRegistry(args[0]);
-		String input = new String();
-		Scanner sc = new Scanner(System.in);
-		char option;
 		
-        do {
-           	
-        	System.out.print(GREETING_MESSAGE);
+        String input = new String();
+        Scanner sc = new Scanner(System.in);
+        char option;
+        String disc_id = null, user_name = null, psswd = null;
+        
+		
+		if (System.getSecurityManager() == null) {
+            System.setSecurityManager(new SecurityManager());
+        }
+        try {
+            String name = "Message";
+            Registry registry = LocateRegistry.getRegistry(args[0]);
+            RMI_Interface message = (RMI_Interface) registry.lookup(name);
             
-        	input = sc.nextLine();
-        	
-        	option = input.charAt(0);
-        	
-        	
+
+            do {
+
+            	System.out.print(GREETING_MESSAGE);
+
             	
-           	
-        } while (option != '7');
-           
+            	input = sc.next();
+            	option = input.charAt(0);
+            	
+            	if (option != '7') {
+            		if(option != '1' && option != '4') {
+                		disc_id = sc.next();
+                		if(option == '6'){
+                			user_name = sc.next();
+                			psswd = sc.next();
+                		}
+                	}
+                	
+            		String server_output;
+            		
+                	switch(option) {
+        			case '1':
+        				server_output = message.listAllDisciplines();
+        			case '2':
+        				server_output = message.disciplineMenu(disc_id);
+        			case '3':
+        				server_output = message.disciplineInfo(disc_id);
+        			case '4':
+        				server_output = message.listAllDisciplinesInfo();
+        			case '5':
+        				server_output = message.writeComment(disc_id, user_name, psswd);
+        			case '6':
+        				server_output = message.getComment(disc_id);
+        			default:
+        				server_output = ERROR_MESSAGE;
+                	}
+                	
+                	
+                	System.out.println(server_output);
+            	}
+            } while (option != '7');
+
             
-        //} catch (Exception e) {
-        //    System.err.println("ComputePi exception:");
-        //    e.printStackTrace();
-        //}
+        } catch (Exception e) {
+            System.err.println("Client exception:");
+            e.printStackTrace();
+        }
+        
+        sc.close();
 	}
 }
