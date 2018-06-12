@@ -11,22 +11,7 @@ public class ServerMain {
 	
 	public String Result() {
 		
-		switch(option) {
-			case '1':
-				return listAllDisciplines();
-			case '2':
-				return disciplineMenu();
-			case '3':
-				return disciplineInfo();
-			case '4':
-				return listAllDisciplinesInfo();
-			case '5':
-				return writeComment();
-			case '6':
-				return getComment();
-			default:
-				return ERROR_MESSAGE;
-		}
+		
 	}
 	
 	public static String listAllDisciplines() {

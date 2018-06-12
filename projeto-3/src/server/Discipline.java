@@ -81,8 +81,36 @@ public class Discipline {
 		return disc;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public String getId() {
+		return id;
+	}
+	
+	public String getTitulo() {
+		return titulo;
+	}
+	
+	public String getEmenta() {
+		return ementa;
+	}
+
+	public String getSala_de_aula() {
+		return sala_de_aula;
+	}
+
+	public String getHorario() {
+		return horario;
+	}
+
+	public String getComentario() {
+		return comentario;
+	}
+
+	public String getUsuario() {
+		return usuario;
+	}
+
+	public String getSenha() {
+		return senha;
 	}
 	
 	

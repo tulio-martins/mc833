@@ -20,24 +20,46 @@ public class RMI_Server implements RMI_Interface {
 	
 	public String listAllDisciplines() throws RemoteException {
 		
-			
+		String output = new String();
 		
-		return null;
+		output = "";
+		
+		for(int i =0; i < 10; i++)
+				output.concat("Discplina "+ disc.get(i).getId() + ": " + disc.get(i).getTitulo() + "\n");
+		
+		return output;
 	}
 
 	public String disciplineMenu(String disc_id) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+		
+		for(int i = 0 ;i < 10; i++) {
+			if(disc_id.equals(disc.get(i).getId())) {
+				return "Disciplina: "+disc.get(i).getId() + ".\n Ementa :" + disc.get(i).getEmenta() + "\n";
+			}
+		}
+		
+		return "Id da disciplina incorreto\n";
 	}
 
 	public String disciplineInfo(String disc_id) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+		for(int i = 0 ;i < 10; i++) {
+			if(disc_id.equals(disc.get(i).getId())) {
+				return "Disciplina: "+disc.get(i).getId() + ".\n Ementa :" + disc.get(i).getEmenta() + "\n";
+			}
+		}
+		
+		return "Id da disciplina incorreto\n";
 	}
 
 	public String listAllDisciplinesInfo() throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+		String output = new String();
+		
+		output = "";
+		
+		for(int i =0; i < 10; i++)
+				output.concat("Discplina "+ disc.get(i).getId() + ": " + disc.get(i).getTitulo() + "\n");
+		
+		return output;
 	}
 
 	public String writeComment(String disc_id, String user_name, String psswd)
@@ -47,7 +69,7 @@ public class RMI_Server implements RMI_Interface {
 	}
 
 	public String getComment(String disc_id) throws RemoteException {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 	
