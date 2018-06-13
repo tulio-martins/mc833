@@ -1,7 +1,6 @@
 package server;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -10,15 +9,15 @@ import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
-import java.util.List;
+import java.util.ArrayList;
 
 
-import compute.RMI_Interface;
+import interface_rmi.RMI_Interface;
 
 
 public class RMI_Server implements RMI_Interface {
 
-	private static List<Discipline> disc;
+	private static ArrayList<Discipline> disc;
 	
 	public RMI_Server() {
 		super();
