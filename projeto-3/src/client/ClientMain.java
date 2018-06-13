@@ -30,7 +30,7 @@ public class ClientMain {
         String input = new String();
         Scanner sc = new Scanner(System.in);
         char option;
-        String disc_id = null, user_name = null, psswd = null;
+        String disc_id = null, user_name = null, psswd = null, comment  = null;
         
 		
 		if (System.getSecurityManager() == null) {
@@ -56,6 +56,7 @@ public class ClientMain {
                 		if(option == '6'){
                 			user_name = sc.next();
                 			psswd = sc.next();
+                			comment = sc.nextLine();
                 		}
                 	}
                 	
@@ -71,7 +72,7 @@ public class ClientMain {
         			case '4':
         				server_output = message.listAllDisciplinesInfo();
         			case '5':
-        				server_output = message.writeComment(disc_id, user_name, psswd);
+        				server_output = message.writeComment(disc_id, user_name, psswd, comment);
         			case '6':
         				server_output = message.getComment(disc_id);
         			default:

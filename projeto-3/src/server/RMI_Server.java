@@ -1,5 +1,11 @@
 package server;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -42,9 +48,34 @@ public class RMI_Server implements RMI_Interface {
 	}
 
 	public String disciplineInfo(String disc_id) throws RemoteException {
+		FileReader f;
+		String comment = new String();
+		String line;
+		
+		
 		for(int i = 0 ;i < 10; i++) {
 			if(disc_id.equals(disc.get(i).getId())) {
-				return "Disciplina: "+disc.get(i).getId() + ".\n Ementa :" + disc.get(i).getEmenta() + "\n";
+				try {
+					f = new FileReader(disc.get(i).getId() + ".txt");
+					BufferedReader bf = new BufferedReader(f);
+					
+					while((line = bf.readLine()) != null) {
+		                comment.concat(line);
+		            }   
+					
+					bf.close();
+					f.close();
+				} catch (FileNotFoundException e) {
+					comment = "N/A";
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				
+				
+				return " Disciplina: "+disc.get(i).getId() + ".\n Titulo : " + disc.get(i).getTitulo() +
+						".\n Ementa :" + disc.get(i).getEmenta() + ".\n Sala :" + disc.get(i).getSala_de_aula() +
+						".\n Horario :" + disc.get(i).getHorario() + ".\n Comentario da ultima aula :" + comment + "\n";
 			}
 		}
 		
@@ -54,23 +85,105 @@ public class RMI_Server implements RMI_Interface {
 	public String listAllDisciplinesInfo() throws RemoteException {
 		String output = new String();
 		
+		FileReader f;
+		String comment = new String();
+		String line;
+		
 		output = "";
 		
-		for(int i =0; i < 10; i++)
-				output.concat("Discplina "+ disc.get(i).getId() + ": " + disc.get(i).getTitulo() + "\n");
+		for(int i =0; i < 10; i++) {
+			
+			try {
+				f = new FileReader(disc.get(i).getId() + ".txt");
+				BufferedReader bf = new BufferedReader(f);
+
+				while((line = bf.readLine()) != null) {
+					comment.concat(line);
+				}   
+
+				bf.close();
+				f.close();
+			} catch (FileNotFoundException e) {
+				comment = "N/A";
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			
+			output.concat(" Disciplina: "+disc.get(i).getId() + ".\n Titulo : " + disc.get(i).getTitulo() +
+						".\n Ementa :" + disc.get(i).getEmenta() + ".\n Sala :" + disc.get(i).getSala_de_aula() +
+						".\n Horario :" + disc.get(i).getHorario() + ".\n Comentario da ultima aula :" + comment + "\n");
+		}
 		
 		return output;
 	}
 
-	public String writeComment(String disc_id, String user_name, String psswd)
+	public String writeComment(String disc_id, String user_name, String psswd, String comment)
 			throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+		PrintWriter writer;
+		
+		
+		for(int i = 0 ;i < 10; i++) {
+			if(disc_id.equals(disc.get(i).getId())) {
+				if(user_name.equals(disc.get(i).getUsuario())) {
+					if(psswd.equals(disc.get(i).getSenha())) {
+						try {
+							writer  = new PrintWriter(disc.get(i).getId()+".txt");
+							
+							
+							writer.println(comment);
+							writer.close();
+							
+							return "Comentario escrito com sucesso";
+						} catch (FileNotFoundException e) {
+							e.printStackTrace();
+							return "Erro inesperado e intratatavel";
+						}
+
+						
+					} else {
+						return "Senha incorreta para disciplina "+disc_id;
+					}
+				} else {
+					return "Usuario para disciplina "+disc_id+" incorreto";
+				}
+			}
+		}
+		
+		return "Id da disciplina incorreto\n";
 	}
 
 	public String getComment(String disc_id) throws RemoteException {
+		FileReader f;
+		String comment = new String();
+		String line;
 		
-		return null;
+		
+		for(int i = 0 ;i < 10; i++) {
+			if(disc_id.equals(disc.get(i).getId())) {
+				try {
+					f = new FileReader(disc.get(i).getId() + ".txt");
+					BufferedReader bf = new BufferedReader(f);
+					
+					while((line = bf.readLine()) != null) {
+		                comment.concat(line);
+		            }   
+					
+					bf.close();
+					f.close();
+				} catch (FileNotFoundException e) {
+					comment = "N/A";
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+				
+				
+				
+				return " Disciplina: "+disc.get(i).getId() + ".\n Comentario da ultima aula :" + comment + "\n";
+			}
+		}
+		
+		return "Id da disciplina incorreto\n";
 	}
 	
 	public static void main(String args[]) {
