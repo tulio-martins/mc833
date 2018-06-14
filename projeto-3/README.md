@@ -1,8 +1,11 @@
 # Compilando
 
 considerando que você tá na pasta src:
+
 mkdir ../class
+
 javac -d ../class server/RMI_Server.java server/Discipline.java interface_rmi/RMI_Interface.java client/ClientMain.java
+
 jar cvf ../class/server/RMI_Server.jar ../class/server/RMI_Server.class
 
 # Executando o servidor
