@@ -30,11 +30,11 @@ public class RMI_Server implements RMI_Interface {
 		output = "";
 		
 		for(int i =0; i < 10; i++)
-				output.concat("Discplina "+ disc.get(i).getId() + ": " + disc.get(i).getTitulo() + "\n");
+				output += "Discplina "+ disc.get(i).getId() + ": " + disc.get(i).getTitulo() + "\n";
 		
 		return output;
 	}
-
+	
 	public String disciplineMenu(String disc_id) throws RemoteException {
 		
 		for(int i = 0 ;i < 10; i++) {
@@ -58,8 +58,10 @@ public class RMI_Server implements RMI_Interface {
 					f = new FileReader(disc.get(i).getId() + ".txt");
 					BufferedReader bf = new BufferedReader(f);
 					
+					comment = "";
+					
 					while((line = bf.readLine()) != null) {
-		                comment.concat(line);
+		                comment += line;
 		            }   
 					
 					bf.close();
@@ -92,12 +94,14 @@ public class RMI_Server implements RMI_Interface {
 		
 		for(int i =0; i < 10; i++) {
 			
+			comment = "";
+			
 			try {
 				f = new FileReader(disc.get(i).getId() + ".txt");
 				BufferedReader bf = new BufferedReader(f);
 
 				while((line = bf.readLine()) != null) {
-					comment.concat(line);
+					comment += line;
 				}   
 
 				bf.close();
@@ -109,9 +113,9 @@ public class RMI_Server implements RMI_Interface {
 			}
 			
 			
-			output.concat(" Disciplina: "+disc.get(i).getId() + ".\n Titulo : " + disc.get(i).getTitulo() +
+			output += " Disciplina: "+disc.get(i).getId() + ".\n Titulo : " + disc.get(i).getTitulo() +
 						".\n Ementa :" + disc.get(i).getEmenta() + ".\n Sala :" + disc.get(i).getSala_de_aula() +
-						".\n Horario :" + disc.get(i).getHorario() + ".\n Comentario da ultima aula :" + comment + "\n");
+						".\n Horario :" + disc.get(i).getHorario() + ".\n Comentario da ultima aula :" + comment + "\n";
 		}
 		
 		return output;
@@ -165,7 +169,7 @@ public class RMI_Server implements RMI_Interface {
 					BufferedReader bf = new BufferedReader(f);
 					
 					while((line = bf.readLine()) != null) {
-		                comment.concat(line);
+		                comment += line;
 		            }   
 					
 					bf.close();

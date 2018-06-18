@@ -53,10 +53,11 @@ public class ClientMain {
             		if(option != '1' && option != '4') {
                 		disc_id = sc.next();
                 		System.out.println(disc_id);
-                		if(option == '6'){
+                		if(option == '5'){
                 			user_name = sc.next();
                 			psswd = sc.next();
                 			comment = sc.nextLine();
+                			System.out.println("comment: "+comment);
                 		}
                 	}
                 	
@@ -74,6 +75,7 @@ public class ClientMain {
         				break;
         			case '4':
         				server_output = message.listAllDisciplinesInfo();
+        				System.out.println("Guess I made it this far");
         				break;
         			case '5':
         				server_output = message.writeComment(disc_id, user_name, psswd, comment);
