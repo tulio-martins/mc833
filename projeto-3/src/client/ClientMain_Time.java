@@ -4,7 +4,6 @@ import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
-import java.util.Date;
 import java.util.Scanner;
 import interface_rmi.RMI_Interface;
 
@@ -35,9 +34,9 @@ public class ClientMain_Time {
         char option;
         String disc_id = null, user_name = null, psswd = null, comment  = null;
         
-        Date start;
-		Date finish;
-		double miliseconds;
+        long start;
+        long finish;
+		double microseconds;
 		
 		PrintWriter writer;
 		
@@ -70,92 +69,92 @@ public class ClientMain_Time {
             		
                 	switch(option) {
         			case '1':
-        				start = new Date();
+        				start = System.nanoTime();
         				server_output = message.listAllDisciplines();
-        				finish = new Date();
+        				finish = System.nanoTime();
         				
         				writer  = new PrintWriter(new FileWriter("CLIENT_LIST_DISCIPLINES.csv", true));
         				
-        				miliseconds = finish.getTime() - start.getTime();
+        				microseconds = (finish - start) / 1000;
         				
-        				writer.println(miliseconds+",");
+        				writer.print(microseconds+",");
 						writer.close();
         				
         				break;
         			case '2':
-        				start = new Date();
+        				start = System.nanoTime();
         				server_output = message.disciplineMenu(disc_id);
-        				finish = new Date();
+        				finish = System.nanoTime();
         				
         				writer  = new PrintWriter(new FileWriter("CLIENT_DISCIPLINE_MENU.csv", true));
         				
-        				miliseconds = finish.getTime() - start.getTime();
+        				microseconds = (finish - start) / 1000;
         				
-        				writer.println(miliseconds+",");
+        				writer.print(microseconds+",");
 						writer.close();
         				break;
         			case '3':
-        				start = new Date();
+        				start = System.nanoTime();
         				server_output = message.disciplineInfo(disc_id);
-        				finish = new Date();
+        				finish = System.nanoTime();
         				
         				writer  = new PrintWriter(new FileWriter("CLIENT_DISCIPLINE_INFO.csv", true));
         				
-        				miliseconds = finish.getTime() - start.getTime();
+        				microseconds = (finish - start) / 1000;
         				
-        				writer.println(miliseconds+",");
+        				writer.print(microseconds+",");
 						writer.close();
         				
         				break;
         			case '4':
-        				start = new Date();
+        				start = System.nanoTime();
         				server_output = message.listAllDisciplinesInfo();
-        				finish = new Date();
+        				finish = System.nanoTime();
         				
         				writer  = new PrintWriter(new FileWriter("CLIENT_ALL_DISCIPL_INFO.csv", true));
         				
-        				miliseconds = finish.getTime() - start.getTime();
+        				microseconds = (finish - start) / 1000;
         				
-        				writer.println(miliseconds+",");
+        				writer.print(microseconds+",");
 						writer.close();
         				
         				break;
         			case '5':
-        				start = new Date();
+        				start = System.nanoTime();
         				server_output = message.writeComment(disc_id, user_name, psswd, comment);
-        				finish = new Date();
+        				finish = System.nanoTime();
         				
         				writer  = new PrintWriter(new FileWriter("CLIENT_WRITE_COMMENT.csv", true));
         				
-        				miliseconds = finish.getTime() - start.getTime();
+        				microseconds = (finish - start) / 1000;
         				
-        				writer.println(miliseconds+",");
+        				writer.print(microseconds+",");
 						writer.close();
         				
         				break;
         			case '6':
-        				start = new Date();
+        				start = System.nanoTime();
         				server_output = message.getComment(disc_id);
-        				finish = new Date();
+        				finish = System.nanoTime();
         				
         				writer  = new PrintWriter(new FileWriter("CLIENT_GET_COMMENT.csv", true));
         				
-        				miliseconds = finish.getTime() - start.getTime();
+        				microseconds = (finish - start) / 1000;
         				
-        				writer.println(miliseconds+",");
+        				writer.print(microseconds+",");
 						writer.close();
         				
         				break;
         			default:
-        				start = new Date();
+        				start = System.nanoTime();
         				server_output = ERROR_MESSAGE;
-        				finish = new Date();
+        				finish = System.nanoTime();
         				
         				writer  = new PrintWriter(new FileWriter("CLIENT_ERROR.csv", true));
         				
-        				miliseconds = finish.getTime() - start.getTime();
+        				microseconds = (finish - start) / 1000;
         				
-        				writer.println(miliseconds+",");
+        				writer.println(microseconds+",");
 						writer.close();
         				
         				break;
