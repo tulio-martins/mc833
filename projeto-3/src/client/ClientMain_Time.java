@@ -1,5 +1,6 @@
 package client;
 
+import java.io.PrintWriter;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.util.Date;
@@ -35,6 +36,9 @@ public class ClientMain_Time {
         
         Date start;
 		Date finish;
+		long miliseconds;
+		
+		PrintWriter writer;
 		
         try {
             String name = "Message";
@@ -68,42 +72,96 @@ public class ClientMain_Time {
         				start = new Date();
         				server_output = message.listAllDisciplines();
         				finish = new Date();
+        				
+        				writer  = new PrintWriter("CLIENT_LIST_DISCIPLINES.csv");
+        				
+        				miliseconds = finish.getTime() - start.getTime();
+        				
+        				writer.println(miliseconds+",");
+						writer.close();
+        				
         				break;
         			case '2':
         				start = new Date();
         				server_output = message.disciplineMenu(disc_id);
         				finish = new Date();
+        				
+        				writer  = new PrintWriter("CLIENT_DISCIPLINE_MENU.csv");
+        				
+        				miliseconds = finish.getTime() - start.getTime();
+        				
+        				writer.println(miliseconds+",");
+						writer.close();
         				break;
         			case '3':
         				start = new Date();
         				server_output = message.disciplineInfo(disc_id);
         				finish = new Date();
+        				
+        				writer  = new PrintWriter("CLIENT_DISCIPLINE_INFO.csv");
+        				
+        				miliseconds = finish.getTime() - start.getTime();
+        				
+        				writer.println(miliseconds+",");
+						writer.close();
+        				
         				break;
         			case '4':
         				start = new Date();
         				server_output = message.listAllDisciplinesInfo();
         				finish = new Date();
+        				
+        				writer  = new PrintWriter("CLIENT_ALL_DISCIPL_INFO.csv");
+        				
+        				miliseconds = finish.getTime() - start.getTime();
+        				
+        				writer.println(miliseconds+",");
+						writer.close();
+        				
         				break;
         			case '5':
         				start = new Date();
         				server_output = message.writeComment(disc_id, user_name, psswd, comment);
         				finish = new Date();
+        				
+        				writer  = new PrintWriter("CLIENT_WRITE_COMMENT.csv");
+        				
+        				miliseconds = finish.getTime() - start.getTime();
+        				
+        				writer.println(miliseconds+",");
+						writer.close();
+        				
         				break;
         			case '6':
         				start = new Date();
         				server_output = message.getComment(disc_id);
         				finish = new Date();
+        				
+        				writer  = new PrintWriter("CLIENT_GET_COMMENT.csv");
+        				
+        				miliseconds = finish.getTime() - start.getTime();
+        				
+        				writer.println(miliseconds+",");
+						writer.close();
+        				
         				break;
         			default:
         				start = new Date();
         				server_output = ERROR_MESSAGE;
         				finish = new Date();
+        				
+        				writer  = new PrintWriter("CLIENT_ERROR.csv");
+        				
+        				miliseconds = finish.getTime() - start.getTime();
+        				
+        				writer.println(miliseconds+",");
+						writer.close();
+        				
         				break;
                 	}
                 	
                 	
                 	System.out.println(server_output);
-                	System.out.println(finish.getTime() - start.getTime());
             	}
             } while (option != '7');
 

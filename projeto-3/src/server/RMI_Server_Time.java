@@ -28,6 +28,7 @@ public class RMI_Server_Time implements RMI_Interface {
 		Date start = new Date();
 		Date finish;
 		String output = new String();
+		PrintWriter writer;
 		
 		output = "";
 		
@@ -35,8 +36,21 @@ public class RMI_Server_Time implements RMI_Interface {
 				output += "Discplina "+ disc.get(i).getId() + ": " + disc.get(i).getTitulo() + "\n";
 		
 		finish = new Date();
-		long miliseconds = finish.getTime() - start.getTime();
-		System.out.println(miliseconds);
+		long miliseconds;
+		
+		try {
+			writer  = new PrintWriter("LIST_DISCIPLINES.csv");
+			
+			
+			miliseconds = finish.getTime() - start.getTime();
+			
+			writer.println(miliseconds+",");
+			writer.close();
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
+
 		return output;
 	}
 	
@@ -57,8 +71,22 @@ public class RMI_Server_Time implements RMI_Interface {
 		}
 		
 		finish = new Date();
-		long miliseconds = finish.getTime() - start.getTime();
-		System.out.println(miliseconds);
+		long miliseconds;
+		
+		
+		try {
+			PrintWriter writer;
+			writer  = new PrintWriter("DISCIPLINE_MENU.csv");
+			
+			
+			miliseconds = finish.getTime() - start.getTime();
+			
+			writer.println(miliseconds+",");
+			writer.close();
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		
 		return "Id da disciplina incorreto\n";
 	}
@@ -94,8 +122,21 @@ public class RMI_Server_Time implements RMI_Interface {
 				
 				
 				finish = new Date();
-				long miliseconds = finish.getTime() - start.getTime();
-				System.out.println(miliseconds);
+				long miliseconds;
+				
+				try {
+					PrintWriter writer;
+					writer  = new PrintWriter("DISCIPLINE_INFO.csv");
+					
+					
+					miliseconds = finish.getTime() - start.getTime();
+					
+					writer.println(miliseconds+",");
+					writer.close();
+					
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
 				
 				
 				return " Disciplina: "+disc.get(i).getId() + ".\n Titulo : " + disc.get(i).getTitulo() +
@@ -105,8 +146,21 @@ public class RMI_Server_Time implements RMI_Interface {
 		}
 		
 		finish = new Date();
-		long miliseconds = finish.getTime() - start.getTime();
-		System.out.println(miliseconds);
+		long miliseconds;
+		
+		try {
+			PrintWriter writer;
+			writer  = new PrintWriter("DISCIPLINE_INFO.csv");
+			
+			
+			miliseconds = finish.getTime() - start.getTime();
+			
+			writer.println(miliseconds+",");
+			writer.close();
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		
 		return "Id da disciplina incorreto\n";
 	}
@@ -150,8 +204,21 @@ public class RMI_Server_Time implements RMI_Interface {
 		}
 		
 		finish = new Date();
-		long miliseconds = finish.getTime() - start.getTime();
-		System.out.println(miliseconds);
+		long miliseconds;
+		
+		try {
+			PrintWriter writer;
+			writer  = new PrintWriter("ALL_DISCIPL.csv");
+			
+			
+			miliseconds = finish.getTime() - start.getTime();
+			
+			writer.println(miliseconds+",");
+			writer.close();
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		
 		return output;
 	}
@@ -184,8 +251,21 @@ public class RMI_Server_Time implements RMI_Interface {
 							e.printStackTrace();
 							
 							finish = new Date();
-							long miliseconds = finish.getTime() - start.getTime();
-							System.out.println(miliseconds);
+							long miliseconds;
+							
+							try {
+								PrintWriter time_writer;
+								time_writer  = new PrintWriter("WRITE_COMMENT.csv");
+								
+								
+								miliseconds = finish.getTime() - start.getTime();
+								
+								time_writer.println(miliseconds+",");
+								time_writer.close();
+								
+							} catch (FileNotFoundException e1) {
+								e1.printStackTrace();
+							}
 							
 							return "Erro inesperado e intratatavel";
 						}
@@ -194,16 +274,42 @@ public class RMI_Server_Time implements RMI_Interface {
 					} else {
 						
 						finish = new Date();
-						long miliseconds = finish.getTime() - start.getTime();
-						System.out.println(miliseconds);
+						long miliseconds;
+						
+						try {
+							PrintWriter time_writer;
+							time_writer  = new PrintWriter("WRITE_COMMENT.csv");
+							
+							
+							miliseconds = finish.getTime() - start.getTime();
+							
+							time_writer.println(miliseconds+",");
+							time_writer.close();
+							
+						} catch (FileNotFoundException e) {
+							e.printStackTrace();
+						}
 						
 						return "Senha incorreta para disciplina "+disc_id;
 					}
 				} else {
 					
 					finish = new Date();
-					long miliseconds = finish.getTime() - start.getTime();
-					System.out.println(miliseconds);
+					long miliseconds;
+					
+					try {
+						PrintWriter time_writer;
+						time_writer  = new PrintWriter("WRITE_COMMENT.csv");
+						
+						
+						miliseconds = finish.getTime() - start.getTime();
+						
+						time_writer.println(miliseconds+",");
+						time_writer.close();
+						
+					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					}
 					
 					return "Usuario para disciplina "+disc_id+" incorreto";
 				}
@@ -241,16 +347,42 @@ public class RMI_Server_Time implements RMI_Interface {
 				}
 				
 				finish = new Date();
-				long miliseconds = finish.getTime() - start.getTime();
-				System.out.println(miliseconds);
+				long miliseconds;
+				
+				try {
+					PrintWriter time_writer;
+					time_writer  = new PrintWriter("GET_COMMENT.csv");
+					
+					
+					miliseconds = finish.getTime() - start.getTime();
+					
+					time_writer.println(miliseconds+",");
+					time_writer.close();
+					
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
 				
 				return " Disciplina: "+disc.get(i).getId() + ".\n Comentario da ultima aula :" + comment + "\n";
 			}
 		}
 		
 		finish = new Date();
-		long miliseconds = finish.getTime() - start.getTime();
-		System.out.println(miliseconds);
+		long miliseconds;
+		
+		try {
+			PrintWriter time_writer;
+			time_writer  = new PrintWriter("GET_COMMENT.csv");
+			
+			
+			miliseconds = finish.getTime() - start.getTime();
+			
+			time_writer.println(miliseconds+",");
+			time_writer.close();
+			
+		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		}
 		
 		return "Id da disciplina incorreto\n";
 	}
