@@ -22,7 +22,7 @@ jar cvf interface_rmi.jar interface_rmi/*.class
 
 javac -classpath interface_rmi.jar server/RMI_Server.java server/Discipline.java
 
-javac client/ClientMain.jav
+javac client/ClientMain.java
 
 # Executando o Servidor 2.0
 
