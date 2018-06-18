@@ -1,9 +1,9 @@
 # Compilando
 javac src/interface_rmi/RMI_Interface.java
 
-jar cvf src/interface_rmi.jar src/interface_rmi/*.class
+jar cvf interface_rmi.jar src/interface_rmi/*.class
 
-javac -classpath src/interface_rmi.jar src/server/RMI_Server.java src/server/Discipline.java
+javac -classpath interface_rmi.jar src/server/RMI_Server.java src/server/Discipline.java
 
 javac src/client/ClientMain.java
 
@@ -13,8 +13,8 @@ javac src/client/ClientMain.java
 
 rmiregistry &
 
-java -cp $PWD:/$PWD/interface_rmi.jar -Djava.rmi.server.hostname={IP DO SERVIDOR} -Djava.rmi.server.codebase=$PWD/interface_rmi.jar  server.RMI_Server
+java -cp $PWD/src:/$PWD/interface_rmi.jar -Djava.rmi.server.hostname={IP DO SERVIDOR} -Djava.rmi.server.codebase=$PWD/interface_rmi.jar  server.RMI_Server
 
-#Executando o Cliente
+# Executando o Cliente
 
 java -cp $PWD:$PWD/interface_rmi.jar -Djava.rmi.server.codebase=http://localhost/~{CAMINHO NO SERVIDOR D PASTA PÓS HOME ATE SRC}/src/interface_rmi.jar  client.ClientMain {IP DO SERVIDOR}
