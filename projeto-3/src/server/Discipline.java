@@ -18,6 +18,7 @@ public class Discipline {
 					  String horario, String comentario, String usuario, String senha) {
 		this.id = id;
 		this.ementa = ementa;
+		this.titulo = titulo;
 		this.sala_de_aula = sala_de_aula;
 		this.horario = horario;
 		this.comentario = comentario;
@@ -31,11 +32,11 @@ public class Discipline {
 		
 		ArrayList<Discipline> disc = new ArrayList<Discipline>();
 		
-		disc.add(new Discipline("MC833\0", "Programacao de Redes de Computadores\0",
+		disc.add(new Discipline("MC833", "Programacao de Redes de Computadores\0",
 				"Programacao utilizando diferentes tecnologias de comunicacao: sockets, TCP e UDP, e chamada de metodo remoto.\0",
 				"CC03\0", "Quinta 10:00 a 12:00\0", "mc833.txt\0", "edmundo\0", "edmundo123\0"));
 		
-		disc.add(new Discipline("MC102\0", "Algoritmos e Programacao de Computadores\0",
+		disc.add(new Discipline("MC102", "Algoritmos e Programacao de Computadores\0",
 				"Conceitos basicos de organizacao de computadores. Construcao de algoritmos e sua representacao em pseudocodigo e" +
 				" linguagens de alto nivel. Desenvolvimento sistematico e implementacao de programas. Estruturacao, depuracao, testes" +
 				" e documentacao de programas. Resolucao de problemas.\0",

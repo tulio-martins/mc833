@@ -47,10 +47,12 @@ public class ClientMain {
             	
             	input = sc.next();
             	option = input.charAt(0);
+            	System.out.println(option);
             	
             	if (option != '7') {
             		if(option != '1' && option != '4') {
                 		disc_id = sc.next();
+                		System.out.println(disc_id);
                 		if(option == '6'){
                 			user_name = sc.next();
                 			psswd = sc.next();
@@ -63,18 +65,25 @@ public class ClientMain {
                 	switch(option) {
         			case '1':
         				server_output = message.listAllDisciplines();
+        				break;
         			case '2':
         				server_output = message.disciplineMenu(disc_id);
+        				break;
         			case '3':
         				server_output = message.disciplineInfo(disc_id);
+        				break;
         			case '4':
         				server_output = message.listAllDisciplinesInfo();
+        				break;
         			case '5':
         				server_output = message.writeComment(disc_id, user_name, psswd, comment);
+        				break;
         			case '6':
         				server_output = message.getComment(disc_id);
+        				break;
         			default:
         				server_output = ERROR_MESSAGE;
+        				break;
                 	}
                 	
                 	
