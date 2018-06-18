@@ -1,5 +1,6 @@
 package client;
 
+import java.io.FileWriter;
 import java.io.PrintWriter;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
@@ -36,7 +37,7 @@ public class ClientMain_Time {
         
         Date start;
 		Date finish;
-		long miliseconds;
+		double miliseconds;
 		
 		PrintWriter writer;
 		
@@ -73,7 +74,7 @@ public class ClientMain_Time {
         				server_output = message.listAllDisciplines();
         				finish = new Date();
         				
-        				writer  = new PrintWriter("CLIENT_LIST_DISCIPLINES.csv");
+        				writer  = new PrintWriter(new FileWriter("CLIENT_LIST_DISCIPLINES.csv", true));
         				
         				miliseconds = finish.getTime() - start.getTime();
         				
@@ -86,7 +87,7 @@ public class ClientMain_Time {
         				server_output = message.disciplineMenu(disc_id);
         				finish = new Date();
         				
-        				writer  = new PrintWriter("CLIENT_DISCIPLINE_MENU.csv");
+        				writer  = new PrintWriter(new FileWriter("CLIENT_DISCIPLINE_MENU.csv", true));
         				
         				miliseconds = finish.getTime() - start.getTime();
         				
@@ -98,7 +99,7 @@ public class ClientMain_Time {
         				server_output = message.disciplineInfo(disc_id);
         				finish = new Date();
         				
-        				writer  = new PrintWriter("CLIENT_DISCIPLINE_INFO.csv");
+        				writer  = new PrintWriter(new FileWriter("CLIENT_DISCIPLINE_INFO.csv", true));
         				
         				miliseconds = finish.getTime() - start.getTime();
         				
@@ -111,7 +112,7 @@ public class ClientMain_Time {
         				server_output = message.listAllDisciplinesInfo();
         				finish = new Date();
         				
-        				writer  = new PrintWriter("CLIENT_ALL_DISCIPL_INFO.csv");
+        				writer  = new PrintWriter(new FileWriter("CLIENT_ALL_DISCIPL_INFO.csv", true));
         				
         				miliseconds = finish.getTime() - start.getTime();
         				
@@ -124,7 +125,7 @@ public class ClientMain_Time {
         				server_output = message.writeComment(disc_id, user_name, psswd, comment);
         				finish = new Date();
         				
-        				writer  = new PrintWriter("CLIENT_WRITE_COMMENT.csv");
+        				writer  = new PrintWriter(new FileWriter("CLIENT_WRITE_COMMENT.csv", true));
         				
         				miliseconds = finish.getTime() - start.getTime();
         				
@@ -137,7 +138,7 @@ public class ClientMain_Time {
         				server_output = message.getComment(disc_id);
         				finish = new Date();
         				
-        				writer  = new PrintWriter("CLIENT_GET_COMMENT.csv");
+        				writer  = new PrintWriter(new FileWriter("CLIENT_GET_COMMENT.csv", true));
         				
         				miliseconds = finish.getTime() - start.getTime();
         				
@@ -150,7 +151,7 @@ public class ClientMain_Time {
         				server_output = ERROR_MESSAGE;
         				finish = new Date();
         				
-        				writer  = new PrintWriter("CLIENT_ERROR.csv");
+        				writer  = new PrintWriter(new FileWriter("CLIENT_ERROR.csv", true));
         				
         				miliseconds = finish.getTime() - start.getTime();
         				

@@ -3,6 +3,7 @@ package server;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.rmi.RemoteException;
@@ -39,7 +40,7 @@ public class RMI_Server_Time implements RMI_Interface {
 		long miliseconds;
 		
 		try {
-			writer  = new PrintWriter("LIST_DISCIPLINES.csv");
+			writer  = new PrintWriter(new FileWriter("LIST_DISCIPLINES.csv", true));
 			
 			
 			miliseconds = finish.getTime() - start.getTime();
@@ -48,6 +49,9 @@ public class RMI_Server_Time implements RMI_Interface {
 			writer.close();
 			
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -76,7 +80,7 @@ public class RMI_Server_Time implements RMI_Interface {
 		
 		try {
 			PrintWriter writer;
-			writer  = new PrintWriter("DISCIPLINE_MENU.csv");
+			writer  = new PrintWriter(new FileWriter("DISCIPLINE_MENU.csv", true));
 			
 			
 			miliseconds = finish.getTime() - start.getTime();
@@ -85,6 +89,9 @@ public class RMI_Server_Time implements RMI_Interface {
 			writer.close();
 			
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -126,7 +133,7 @@ public class RMI_Server_Time implements RMI_Interface {
 				
 				try {
 					PrintWriter writer;
-					writer  = new PrintWriter("DISCIPLINE_INFO.csv");
+					writer  = new PrintWriter(new FileWriter("DISCIPLINE_INFO.csv", true));
 					
 					
 					miliseconds = finish.getTime() - start.getTime();
@@ -135,6 +142,9 @@ public class RMI_Server_Time implements RMI_Interface {
 					writer.close();
 					
 				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
@@ -150,7 +160,7 @@ public class RMI_Server_Time implements RMI_Interface {
 		
 		try {
 			PrintWriter writer;
-			writer  = new PrintWriter("DISCIPLINE_INFO.csv");
+			writer  = new PrintWriter(new FileWriter("DISCIPLINE_INFO.csv", true));
 			
 			
 			miliseconds = finish.getTime() - start.getTime();
@@ -159,6 +169,9 @@ public class RMI_Server_Time implements RMI_Interface {
 			writer.close();
 			
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -208,7 +221,7 @@ public class RMI_Server_Time implements RMI_Interface {
 		
 		try {
 			PrintWriter writer;
-			writer  = new PrintWriter("ALL_DISCIPL.csv");
+			writer  = new PrintWriter(new FileWriter("ALL_DISCIPL.csv", true));
 			
 			
 			miliseconds = finish.getTime() - start.getTime();
@@ -217,6 +230,9 @@ public class RMI_Server_Time implements RMI_Interface {
 			writer.close();
 			
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -255,7 +271,7 @@ public class RMI_Server_Time implements RMI_Interface {
 							
 							try {
 								PrintWriter time_writer;
-								time_writer  = new PrintWriter("WRITE_COMMENT.csv");
+								time_writer  = new PrintWriter(new FileWriter("WRITE_COMMENT.csv", true));
 								
 								
 								miliseconds = finish.getTime() - start.getTime();
@@ -264,6 +280,9 @@ public class RMI_Server_Time implements RMI_Interface {
 								time_writer.close();
 								
 							} catch (FileNotFoundException e1) {
+								e1.printStackTrace();
+							} catch (IOException e1) {
+								// TODO Auto-generated catch block
 								e1.printStackTrace();
 							}
 							
@@ -278,7 +297,7 @@ public class RMI_Server_Time implements RMI_Interface {
 						
 						try {
 							PrintWriter time_writer;
-							time_writer  = new PrintWriter("WRITE_COMMENT.csv");
+							time_writer  = new PrintWriter(new FileWriter("WRITE_COMMENT.csv", true));
 							
 							
 							miliseconds = finish.getTime() - start.getTime();
@@ -287,6 +306,9 @@ public class RMI_Server_Time implements RMI_Interface {
 							time_writer.close();
 							
 						} catch (FileNotFoundException e) {
+							e.printStackTrace();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 						
@@ -299,7 +321,7 @@ public class RMI_Server_Time implements RMI_Interface {
 					
 					try {
 						PrintWriter time_writer;
-						time_writer  = new PrintWriter("WRITE_COMMENT.csv");
+						time_writer  = new PrintWriter(new FileWriter("WRITE_COMMENT.csv", true));
 						
 						
 						miliseconds = finish.getTime() - start.getTime();
@@ -308,6 +330,9 @@ public class RMI_Server_Time implements RMI_Interface {
 						time_writer.close();
 						
 					} catch (FileNotFoundException e) {
+						e.printStackTrace();
+					} catch (IOException e) {
+						// TODO Auto-generated catch block
 						e.printStackTrace();
 					}
 					
@@ -351,7 +376,7 @@ public class RMI_Server_Time implements RMI_Interface {
 				
 				try {
 					PrintWriter time_writer;
-					time_writer  = new PrintWriter("GET_COMMENT.csv");
+					time_writer  = new PrintWriter(new FileWriter("GET_COMMENT.csv", true));
 					
 					
 					miliseconds = finish.getTime() - start.getTime();
@@ -360,6 +385,9 @@ public class RMI_Server_Time implements RMI_Interface {
 					time_writer.close();
 					
 				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
 				
@@ -372,7 +400,7 @@ public class RMI_Server_Time implements RMI_Interface {
 		
 		try {
 			PrintWriter time_writer;
-			time_writer  = new PrintWriter("GET_COMMENT.csv");
+			time_writer  = new PrintWriter(new FileWriter("GET_COMMENT.csv", true));
 			
 			
 			miliseconds = finish.getTime() - start.getTime();
@@ -381,6 +409,9 @@ public class RMI_Server_Time implements RMI_Interface {
 			time_writer.close();
 			
 		} catch (FileNotFoundException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -395,7 +426,7 @@ public class RMI_Server_Time implements RMI_Interface {
 		
 		try {
 			String name = "Message";
-			RMI_Interface engine = new RMI_Server();
+			RMI_Interface engine = new RMI_Server_Time();
 			RMI_Interface stub =
 					(RMI_Interface) UnicastRemoteObject.exportObject(engine, 0);
 			Registry registry = LocateRegistry.getRegistry();
