@@ -16,9 +16,11 @@ java -cp /home/nathyharumi/mc833/projeto-3/class/ -Djava.rmi.server.hostname=loc
 # Tentativa 2
 
 # Compilando 2.0
-javac -classpath interface_rmi.jar server/RMI_Server.java server/Discipline.java
+javac interface_rmi/RMI_Interface.java
 
 jar cvf interface_rmi.jar interface_rmi/*.class
+
+javac -classpath interface_rmi.jar server/RMI_Server.java server/Discipline.java
 
 javac -classpath interface_rmi.jar server/RMI_Server.java server/Discipline.java
 
