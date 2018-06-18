@@ -190,9 +190,7 @@ public class RMI_Server implements RMI_Interface {
 		disc = Discipline.generate();
 		
 		
-		if (System.getSecurityManager() == null) {
-			System.setSecurityManager(new SecurityManager());
-		}
+		
 		try {
 			String name = "Message";
 			RMI_Interface engine = new RMI_Server();

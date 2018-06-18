@@ -33,9 +33,7 @@ public class ClientMain {
         String disc_id = null, user_name = null, psswd = null, comment  = null;
         
 		
-		if (System.getSecurityManager() == null) {
-            System.setSecurityManager(new SecurityManager());
-        }
+		
         try {
             String name = "Message";
             Registry registry = LocateRegistry.getRegistry(args[0]);

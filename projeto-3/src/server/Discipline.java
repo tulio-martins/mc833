@@ -44,7 +44,7 @@ public class Discipline {
 		
 		/*<================== Falta mexer daqui para baixo ================>*/
 		
-		disc.add(new Discipline("MC833\0", "Programacao de Redes de Computadores\0",
+		disc.add(new Discipline("MC536\0", "Bancos de Dados: Teoria e Pratica\0",
 				"Programacao utilizando diferentes tecnologias de comunicacao: sockets, TCP e UDP, e chamada de metodo remoto.\0",
 				"CC03\0", "Quinta 10:00 a 12:00\0", "mc833.txt\0", "edmundo\0", "edmundo123\0"));
 		
