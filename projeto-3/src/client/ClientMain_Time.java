@@ -2,11 +2,12 @@ package client;
 
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.util.Date;
 import java.util.Scanner;
 import interface_rmi.RMI_Interface;
 
 
-public class ClientMain {
+public class ClientMain_Time {
 
 	private static String GREETING_MESSAGE = "\n\n" + 
 			"As disciplinas disponiveis sao: MC833; MC102; MC536; MC750; MC358; MC458; MC558; MC658; MC346; MC886\n\n" + 
@@ -32,7 +33,8 @@ public class ClientMain {
         char option;
         String disc_id = null, user_name = null, psswd = null, comment  = null;
         
-		
+        Date start;
+		Date finish;
 		
         try {
             String name = "Message";
@@ -63,30 +65,45 @@ public class ClientMain {
             		
                 	switch(option) {
         			case '1':
+        				start = new Date();
         				server_output = message.listAllDisciplines();
+        				finish = new Date();
         				break;
         			case '2':
+        				start = new Date();
         				server_output = message.disciplineMenu(disc_id);
+        				finish = new Date();
         				break;
         			case '3':
+        				start = new Date();
         				server_output = message.disciplineInfo(disc_id);
+        				finish = new Date();
         				break;
         			case '4':
+        				start = new Date();
         				server_output = message.listAllDisciplinesInfo();
+        				finish = new Date();
         				break;
         			case '5':
+        				start = new Date();
         				server_output = message.writeComment(disc_id, user_name, psswd, comment);
+        				finish = new Date();
         				break;
         			case '6':
+        				start = new Date();
         				server_output = message.getComment(disc_id);
+        				finish = new Date();
         				break;
         			default:
+        				start = new Date();
         				server_output = ERROR_MESSAGE;
+        				finish = new Date();
         				break;
                 	}
                 	
                 	
                 	System.out.println(server_output);
+                	System.out.println(finish.getTime() - start.getTime());
             	}
             } while (option != '7');
 

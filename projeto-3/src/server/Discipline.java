@@ -28,7 +28,6 @@ public class Discipline {
 	}
 
 	public static ArrayList<Discipline> generate() {
-		// TODO Instancia uma ArrayList de Disciplinas
 		
 		ArrayList<Discipline> disc = new ArrayList<Discipline>();
 		

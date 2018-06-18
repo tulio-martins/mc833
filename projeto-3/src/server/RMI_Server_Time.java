@@ -10,20 +10,23 @@ import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
+import java.util.Date;
+
 
 import interface_rmi.RMI_Interface;
 
 
-public class RMI_Server implements RMI_Interface {
+public class RMI_Server_Time implements RMI_Interface {
 
 	private static ArrayList<Discipline> disc;
 	
-	public RMI_Server() {
+	public RMI_Server_Time() {
 		super();
 	}
 	
 	public String listAllDisciplines() throws RemoteException {
-		
+		Date start = new Date();
+		Date finish;
 		String output = new String();
 		
 		output = "";
@@ -31,16 +34,31 @@ public class RMI_Server implements RMI_Interface {
 		for(int i =0; i < 10; i++)
 				output += "Discplina "+ disc.get(i).getId() + ": " + disc.get(i).getTitulo() + "\n";
 		
+		finish = new Date();
+		long miliseconds = finish.getTime() - start.getTime();
+		System.out.println(miliseconds);
 		return output;
 	}
 	
 	public String disciplineMenu(String disc_id) throws RemoteException {
+		Date start = new Date();
+		Date finish;
+		
 		
 		for(int i = 0 ;i < 10; i++) {
 			if(disc_id.equals(disc.get(i).getId())) {
+				
+				finish = new Date();
+				long miliseconds = finish.getTime() - start.getTime();
+				System.out.println(miliseconds);
+				
 				return "Disciplina: "+disc.get(i).getId() + ".\n Ementa :" + disc.get(i).getEmenta() + "\n";
 			}
 		}
+		
+		finish = new Date();
+		long miliseconds = finish.getTime() - start.getTime();
+		System.out.println(miliseconds);
 		
 		return "Id da disciplina incorreto\n";
 	}
@@ -49,6 +67,9 @@ public class RMI_Server implements RMI_Interface {
 		FileReader f;
 		String comment = new String();
 		String line;
+		
+		Date start = new Date();
+		Date finish;
 		
 		
 		for(int i = 0 ;i < 10; i++) {
@@ -72,12 +93,20 @@ public class RMI_Server implements RMI_Interface {
 				}
 				
 				
+				finish = new Date();
+				long miliseconds = finish.getTime() - start.getTime();
+				System.out.println(miliseconds);
+				
 				
 				return " Disciplina: "+disc.get(i).getId() + ".\n Titulo : " + disc.get(i).getTitulo() +
 						".\n Ementa :" + disc.get(i).getEmenta() + ".\n Sala :" + disc.get(i).getSala_de_aula() +
 						".\n Horario :" + disc.get(i).getHorario() + ".\n Comentario da ultima aula :" + comment + "\n";
 			}
 		}
+		
+		finish = new Date();
+		long miliseconds = finish.getTime() - start.getTime();
+		System.out.println(miliseconds);
 		
 		return "Id da disciplina incorreto\n";
 	}
@@ -88,6 +117,9 @@ public class RMI_Server implements RMI_Interface {
 		FileReader f;
 		String comment = new String();
 		String line;
+		
+		Date start = new Date();
+		Date finish;
 		
 		output = "";
 		
@@ -117,12 +149,19 @@ public class RMI_Server implements RMI_Interface {
 						".\n Horario :" + disc.get(i).getHorario() + ".\n Comentario da ultima aula :" + comment + "\n";
 		}
 		
+		finish = new Date();
+		long miliseconds = finish.getTime() - start.getTime();
+		System.out.println(miliseconds);
+		
 		return output;
 	}
 
 	public String writeComment(String disc_id, String user_name, String psswd, String comment)
 			throws RemoteException {
 		PrintWriter writer;
+		
+		Date start = new Date();
+		Date finish;
 		
 		
 		for(int i = 0 ;i < 10; i++) {
@@ -136,17 +175,36 @@ public class RMI_Server implements RMI_Interface {
 							writer.println(comment);
 							writer.close();
 							
+							finish = new Date();
+							long miliseconds = finish.getTime() - start.getTime();
+							System.out.println(miliseconds);
+							
 							return "Comentario escrito com sucesso";
 						} catch (FileNotFoundException e) {
 							e.printStackTrace();
+							
+							finish = new Date();
+							long miliseconds = finish.getTime() - start.getTime();
+							System.out.println(miliseconds);
+							
 							return "Erro inesperado e intratatavel";
 						}
 
 						
 					} else {
+						
+						finish = new Date();
+						long miliseconds = finish.getTime() - start.getTime();
+						System.out.println(miliseconds);
+						
 						return "Senha incorreta para disciplina "+disc_id;
 					}
 				} else {
+					
+					finish = new Date();
+					long miliseconds = finish.getTime() - start.getTime();
+					System.out.println(miliseconds);
+					
 					return "Usuario para disciplina "+disc_id+" incorreto";
 				}
 			}
@@ -159,6 +217,9 @@ public class RMI_Server implements RMI_Interface {
 		FileReader f;
 		String comment = new String();
 		String line;
+		
+		Date start = new Date();
+		Date finish;
 		
 		
 		for(int i = 0 ;i < 10; i++) {
@@ -179,11 +240,17 @@ public class RMI_Server implements RMI_Interface {
 					e.printStackTrace();
 				}
 				
-				
+				finish = new Date();
+				long miliseconds = finish.getTime() - start.getTime();
+				System.out.println(miliseconds);
 				
 				return " Disciplina: "+disc.get(i).getId() + ".\n Comentario da ultima aula :" + comment + "\n";
 			}
 		}
+		
+		finish = new Date();
+		long miliseconds = finish.getTime() - start.getTime();
+		System.out.println(miliseconds);
 		
 		return "Id da disciplina incorreto\n";
 	}
